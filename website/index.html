@@ -869,7 +869,7 @@
             <h3 data-i18n="bind-title">绑定你的 Telegram</h3>
             
             <div class="bind-code-box">
-                <p data-i18n="bind-your-code">你的绑定码：</p>
+                <p data-i18n="bind-your-code">你的绑定命令：</p>
                 <div class="bind-code" id="bindCode">Loading...</div>
                 <button class="copy-btn" onclick="copyBindCode()" data-i18n="copy-button">📋 复制命令</button>
             </div>
@@ -1214,7 +1214,7 @@
                 'bind-telegram': '绑定 Telegram',
                 'start-now': '立即开始 →',
                 'bind-title': '绑定你的 Telegram',
-                'bind-your-code': '你的绑定码：',
+                'bind-your-code': '你的绑定命令：',
                 'copy-button': '📋 复制命令',
                 'bind-step1': '1. 点击复制上方命令',
                 'bind-step2': '2. 打开 Telegram Bot，粘贴发送',
@@ -1287,7 +1287,7 @@
                 'bind-telegram': 'Bind Telegram',
                 'start-now': 'Start Now →',
                 'bind-title': 'Bind Your Telegram',
-                'bind-your-code': 'Your Bind Code:',
+                'bind-your-code': 'Your Bind Command:',
                 'copy-button': '📋 Copy Command',
                 'bind-step1': '1. Copy the command above',
                 'bind-step2': '2. Open Telegram Bot, paste and send',
@@ -1712,21 +1712,7 @@
             }
         }
 
-        // Generate bind code
-        function generateBindCode() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-            let code = 'ALICE-';
-            for (let i = 0; i < 4; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            code += '-';
-            for (let i = 0; i < 4; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
-        }
-
-        // Open bind modal
+        // Open bind modal - show /bind <wallet_address>
         async function openBindModal() {
             let walletAddress = account || window.account;
 
@@ -1751,8 +1737,7 @@
             }
 
             account = walletAddress;
-            const bindCode = generateBindCode();
-            document.getElementById('bindCode').textContent = '/bind ' + bindCode;
+            document.getElementById('bindCode').textContent = '/bind ' + walletAddress;
             document.getElementById('bindModal').style.display = 'block';
         }
 
