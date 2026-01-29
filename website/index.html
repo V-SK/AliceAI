@@ -871,12 +871,12 @@
             <div class="bind-code-box">
                 <p data-i18n="bind-your-code">你的绑定码：</p>
                 <div class="bind-code" id="bindCode">Loading...</div>
-                <button class="copy-btn" onclick="copyBindCode()" data-i18n="copy-button">📋 复制绑定码</button>
+                <button class="copy-btn" onclick="copyBindCode()" data-i18n="copy-button">📋 复制命令</button>
             </div>
             
             <div class="modal-instructions">
-                <p data-i18n="bind-step1">1. 点击下方按钮打开 Telegram Bot</p>
-                <p data-i18n="bind-step2">2. 发送你刚复制的绑定码</p>
+                <p data-i18n="bind-step1">1. 点击复制上方命令</p>
+                <p data-i18n="bind-step2">2. 打开 Telegram Bot，粘贴发送</p>
                 <p data-i18n="bind-step3">3. 等待 Bot 确认绑定成功</p>
             </div>
             
@@ -1215,9 +1215,9 @@
                 'start-now': '立即开始 →',
                 'bind-title': '绑定你的 Telegram',
                 'bind-your-code': '你的绑定码：',
-                'copy-button': '📋 复制绑定码',
-                'bind-step1': '1. 点击下方按钮打开 Telegram Bot',
-                'bind-step2': '2. 发送你刚复制的绑定码',
+                'copy-button': '📋 复制命令',
+                'bind-step1': '1. 点击复制上方命令',
+                'bind-step2': '2. 打开 Telegram Bot，粘贴发送',
                 'bind-step3': '3. 等待 Bot 确认绑定成功',
                 'open-telegram': '打开 Telegram Bot →',
                 'features-title': '核心特色',
@@ -1288,9 +1288,9 @@
                 'start-now': 'Start Now →',
                 'bind-title': 'Bind Your Telegram',
                 'bind-your-code': 'Your Bind Code:',
-                'copy-button': '📋 Copy Code',
-                'bind-step1': '1. Click the button below to open Telegram Bot',
-                'bind-step2': '2. Send the bind code you just copied',
+                'copy-button': '📋 Copy Command',
+                'bind-step1': '1. Copy the command above',
+                'bind-step2': '2. Open Telegram Bot, paste and send',
                 'bind-step3': '3. Wait for Bot confirmation',
                 'open-telegram': 'Open Telegram Bot →',
                 'features-title': 'Core Features',
@@ -1752,7 +1752,7 @@
 
             account = walletAddress;
             const bindCode = generateBindCode();
-            document.getElementById('bindCode').textContent = bindCode;
+            document.getElementById('bindCode').textContent = '/bind ' + bindCode;
             document.getElementById('bindModal').style.display = 'block';
         }
 
@@ -1765,9 +1765,9 @@
         function copyBindCode() {
             const code = document.getElementById('bindCode').textContent;
             navigator.clipboard.writeText(code).then(() => {
-                alert(currentLanguage === 'zh' ? 
-                    '绑定码已复制！现在去 Telegram 粘贴吧！' : 
-                    'Bind code copied! Now paste it in Telegram!');
+                alert(currentLanguage === 'zh' ?
+                    '已复制！现在去 Telegram 粘贴发送即可' :
+                    'Copied! Now paste and send in Telegram');
             });
         }
 
