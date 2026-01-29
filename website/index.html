@@ -782,6 +782,59 @@
             padding: 0 12px;
         }
 
+        /* WalletConnect QR Modal */
+        .qr-modal {
+            background: white;
+            border-radius: 25px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .qr-modal h3 {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .qr-modal p {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        .qr-modal img {
+            max-width: 260px;
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .qr-modal .qr-loading {
+            padding: 60px 0;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        .qr-modal .qr-loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #F7931A;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             .wallet-modal {
                 width: 95%;
@@ -895,6 +948,21 @@
                     <div class="wallet-option-desc" data-wallet-desc="imtoken">imToken 钱包</div>
                 </div>
                 <div class="wallet-option-arrow">›</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WalletConnect QR Modal -->
+    <div id="qrOverlay" class="wallet-overlay" onclick="if(event.target===this)closeQrModal()">
+        <div class="qr-modal">
+            <div class="wallet-modal-header">
+                <h3 id="qrTitle">扫码连接</h3>
+                <button class="wallet-modal-close" onclick="closeQrModal()">&times;</button>
+            </div>
+            <p id="qrDesc">请用手机钱包扫描二维码</p>
+            <div id="qrContent">
+                <div class="qr-loading" id="qrLoading">正在生成二维码</div>
+                <img id="qrImage" style="display:none" alt="QR Code" />
             </div>
         </div>
     </div>
@@ -1418,22 +1486,25 @@
 
             // Update descriptions with detection status on desktop
             const mobile = isMobile();
+            const hasWCV2 = typeof window.connectWalletConnectV2 === 'function';
+            const noExtZh = hasWCV2 ? '扫码连接' : '未安装 - 点击安装';
+            const noExtEn = hasWCV2 ? 'Scan QR Code' : 'Not Installed - Click to Install';
             const descs = {
                 zh: {
-                    metamask: mobile ? '唤起 App' : (getMetaMaskProvider() ? '已检测到扩展' : '未安装 - 点击安装'),
-                    binance: mobile ? '唤起 App' : (getBinanceProvider() ? '已检测到扩展' : '未安装 - 点击安装'),
-                    okx: mobile ? '唤起 App' : (getOkxProvider() ? '已检测到扩展' : '未安装 - 点击安装'),
-                    trust: mobile ? '唤起 App' : '桌面扩展 / 安装',
-                    tokenpocket: mobile ? '唤起 App' : '桌面扩展 / 安装',
-                    imtoken: mobile ? '唤起 App' : '移动端钱包 - 点击下载'
+                    metamask: mobile ? '唤起 App' : (getMetaMaskProvider() ? '已检测到扩展' : noExtZh),
+                    binance: mobile ? '唤起 App' : (getBinanceProvider() ? '已检测到扩展' : noExtZh),
+                    okx: mobile ? '唤起 App' : (getOkxProvider() ? '已检测到扩展' : noExtZh),
+                    trust: mobile ? '唤起 App' : noExtZh,
+                    tokenpocket: mobile ? '唤起 App' : noExtZh,
+                    imtoken: mobile ? '唤起 App' : noExtZh
                 },
                 en: {
-                    metamask: mobile ? 'Open App' : (getMetaMaskProvider() ? 'Extension Detected' : 'Not Installed - Click to Install'),
-                    binance: mobile ? 'Open App' : (getBinanceProvider() ? 'Extension Detected' : 'Not Installed - Click to Install'),
-                    okx: mobile ? 'Open App' : (getOkxProvider() ? 'Extension Detected' : 'Not Installed - Click to Install'),
-                    trust: mobile ? 'Open App' : 'Desktop Extension / Install',
-                    tokenpocket: mobile ? 'Open App' : 'Desktop Extension / Install',
-                    imtoken: mobile ? 'Open App' : 'Mobile Wallet - Click to Download'
+                    metamask: mobile ? 'Open App' : (getMetaMaskProvider() ? 'Extension Detected' : noExtEn),
+                    binance: mobile ? 'Open App' : (getBinanceProvider() ? 'Extension Detected' : noExtEn),
+                    okx: mobile ? 'Open App' : (getOkxProvider() ? 'Extension Detected' : noExtEn),
+                    trust: mobile ? 'Open App' : noExtEn,
+                    tokenpocket: mobile ? 'Open App' : noExtEn,
+                    imtoken: mobile ? 'Open App' : noExtEn
                 }
             };
             document.querySelectorAll('[data-wallet-desc]').forEach(el => {
@@ -1459,7 +1530,7 @@
             }
         }
 
-        // Desktop: try browser extension, or prompt to install
+        // Desktop: try browser extension, or fallback to WalletConnect v2 QR
         async function handleDesktopWallet(walletType) {
             try {
                 let provider = null;
@@ -1471,7 +1542,6 @@
                 } else if (walletType === 'okx') {
                     provider = getOkxProvider();
                 } else if (walletType === 'trust') {
-                    // Trust Wallet also has a browser extension now
                     const eip6963 = findProviderByRdns('com.trustwallet');
                     provider = eip6963 || (window.trustwallet) || null;
                 } else if (walletType === 'tokenpocket') {
@@ -1482,9 +1552,14 @@
                 if (provider) {
                     await connectBrowserWallet(provider);
                 } else {
-                    // No extension found → prompt to install
-                    const downloadUrl = walletDownloadLinks[walletType];
-                    alertNoExtension(walletType, downloadUrl);
+                    // No extension → WalletConnect v2 QR code
+                    if (typeof window.connectWalletConnectV2 === 'function') {
+                        await window.connectWalletConnectV2();
+                    } else {
+                        // WC v2 not loaded yet, prompt install instead
+                        const downloadUrl = walletDownloadLinks[walletType];
+                        alertNoExtension(walletType, downloadUrl);
+                    }
                 }
             } catch (error) {
                 handleConnectionError(error);
@@ -1712,6 +1787,122 @@
         setTimeout(() => {
             window.dispatchEvent(new Event('eip6963:requestProvider'));
         }, 500);
+
+        // QR Modal helpers
+        function showQrModal() {
+            document.getElementById('qrTitle').textContent =
+                currentLanguage === 'zh' ? '扫码连接' : 'Scan to Connect';
+            document.getElementById('qrDesc').textContent =
+                currentLanguage === 'zh' ? '请用手机钱包扫描二维码' : 'Scan QR code with your mobile wallet';
+            document.getElementById('qrLoading').textContent =
+                currentLanguage === 'zh' ? '正在生成二维码' : 'Generating QR code';
+            document.getElementById('qrImage').style.display = 'none';
+            document.getElementById('qrLoading').style.display = 'block';
+            document.getElementById('qrOverlay').classList.add('active');
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrOverlay').classList.remove('active');
+            // If WC v2 is connecting, disconnect
+            if (window._wcv2Disconnect) {
+                window._wcv2Disconnect();
+                window._wcv2Disconnect = null;
+            }
+        }
+
+        function showQrImage(uri) {
+            const img = document.getElementById('qrImage');
+            img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(uri);
+            img.style.display = 'block';
+            document.getElementById('qrLoading').style.display = 'none';
+        }
+    </script>
+
+    <!-- WalletConnect v2 (ES Module via esm.sh) -->
+    <script type="module">
+        import { EthereumProvider } from "https://esm.sh/@walletconnect/ethereum-provider@2.17.0";
+
+        window.connectWalletConnectV2 = async function() {
+            showQrModal();
+
+            try {
+                const provider = await EthereumProvider.init({
+                    projectId: 'a2e98dc7f5d6115dc0ffafed5f522fd3',
+                    metadata: {
+                        name: 'Alice AI',
+                        description: 'Your Personal Crypto AI Assistant',
+                        url: window.location.origin,
+                        icons: [window.location.origin + '/alice-logo.png']
+                    },
+                    optionalChains: [56],
+                    rpcMap: {
+                        56: 'https://bsc-dataseed.binance.org/'
+                    },
+                    showQrModal: false
+                });
+
+                // Store disconnect function so closeQrModal can cancel
+                window._wcv2Disconnect = () => {
+                    try { provider.disconnect(); } catch(e) {}
+                };
+
+                // Show QR code when URI is ready
+                provider.on('display_uri', (uri) => {
+                    showQrImage(uri);
+                });
+
+                // Connect (waits for user to scan)
+                await provider.connect();
+
+                // Connected! Close QR modal
+                document.getElementById('qrOverlay').classList.remove('active');
+                window._wcv2Disconnect = null;
+
+                // Initialize Web3 with WC provider
+                window.web3 = new Web3(provider);
+                window.account = provider.accounts[0];
+
+                // Check chain
+                if (provider.chainId !== 56) {
+                    const msg = window.currentLanguage === 'zh'
+                        ? '请在钱包中切换到 BSC 主网！'
+                        : 'Please switch to BSC Mainnet in your wallet!';
+                    alert(msg);
+                }
+
+                displayWalletInfo(window.account);
+                await updateTokenBalance(window.account);
+
+                // Events
+                provider.on('accountsChanged', (accounts) => {
+                    if (accounts.length === 0) {
+                        document.getElementById('connectSection').classList.remove('hidden');
+                        document.getElementById('walletInfo').classList.add('hidden');
+                    } else {
+                        window.account = accounts[0];
+                        displayWalletInfo(window.account);
+                        updateTokenBalance(window.account);
+                    }
+                });
+
+                provider.on('disconnect', () => {
+                    document.getElementById('connectSection').classList.remove('hidden');
+                    document.getElementById('walletInfo').classList.add('hidden');
+                });
+
+            } catch (error) {
+                document.getElementById('qrOverlay').classList.remove('active');
+                if (error.message && !error.message.includes('User rejected')) {
+                    console.error('WalletConnect v2 error:', error);
+                    const msg = window.currentLanguage === 'zh'
+                        ? '连接失败，请重试'
+                        : 'Connection failed, please try again';
+                    alert(msg);
+                }
+            }
+        };
+
+        console.log('[WalletConnect v2] Module loaded, projectId: a2e98d...');
     </script>
 </body>
 </html>
