@@ -1489,22 +1489,41 @@
             const hasWCV2 = typeof window.connectWalletConnectV2 === 'function';
             const noExtZh = hasWCV2 ? '扫码连接' : '未安装 - 点击安装';
             const noExtEn = hasWCV2 ? 'Scan QR Code' : 'Not Installed - Click to Install';
+            // Check if ANY extension is available (general fallback)
+            const hasAnyExt = !!window.ethereum;
+
+            // Debug: log detection results
+            console.log('[Wallet Detection]',
+                'ethereum:', !!window.ethereum,
+                'isMetaMask:', window.ethereum?.isMetaMask,
+                'okxwallet:', !!window.okxwallet,
+                'binancew3w:', !!window.binancew3w,
+                'BinanceChain:', !!window.BinanceChain,
+                'EIP-6963 providers:', discoveredProviders.map(p => p.info.rdns)
+            );
+
+            function descFor(specificCheck) {
+                if (specificCheck) return currentLanguage === 'zh' ? '已检测到扩展' : 'Extension Detected';
+                if (hasAnyExt) return currentLanguage === 'zh' ? '浏览器钱包' : 'Browser Wallet';
+                return currentLanguage === 'zh' ? noExtZh : noExtEn;
+            }
+
             const descs = {
                 zh: {
-                    metamask: mobile ? '唤起 App' : (getMetaMaskProvider() ? '已检测到扩展' : noExtZh),
-                    binance: mobile ? '唤起 App' : (getBinanceProvider() ? '已检测到扩展' : noExtZh),
-                    okx: mobile ? '唤起 App' : (getOkxProvider() ? '已检测到扩展' : noExtZh),
-                    trust: mobile ? '唤起 App' : noExtZh,
-                    tokenpocket: mobile ? '唤起 App' : noExtZh,
-                    imtoken: mobile ? '唤起 App' : noExtZh
+                    metamask: mobile ? '唤起 App' : descFor(getMetaMaskProvider()),
+                    binance: mobile ? '唤起 App' : descFor(getBinanceProvider()),
+                    okx: mobile ? '唤起 App' : descFor(getOkxProvider()),
+                    trust: mobile ? '唤起 App' : (hasAnyExt ? '浏览器钱包' : noExtZh),
+                    tokenpocket: mobile ? '唤起 App' : (hasAnyExt ? '浏览器钱包' : noExtZh),
+                    imtoken: mobile ? '唤起 App' : (hasAnyExt ? '浏览器钱包' : noExtZh)
                 },
                 en: {
-                    metamask: mobile ? 'Open App' : (getMetaMaskProvider() ? 'Extension Detected' : noExtEn),
-                    binance: mobile ? 'Open App' : (getBinanceProvider() ? 'Extension Detected' : noExtEn),
-                    okx: mobile ? 'Open App' : (getOkxProvider() ? 'Extension Detected' : noExtEn),
-                    trust: mobile ? 'Open App' : noExtEn,
-                    tokenpocket: mobile ? 'Open App' : noExtEn,
-                    imtoken: mobile ? 'Open App' : noExtEn
+                    metamask: mobile ? 'Open App' : descFor(getMetaMaskProvider()),
+                    binance: mobile ? 'Open App' : descFor(getBinanceProvider()),
+                    okx: mobile ? 'Open App' : descFor(getOkxProvider()),
+                    trust: mobile ? 'Open App' : (hasAnyExt ? 'Browser Wallet' : noExtEn),
+                    tokenpocket: mobile ? 'Open App' : (hasAnyExt ? 'Browser Wallet' : noExtEn),
+                    imtoken: mobile ? 'Open App' : (hasAnyExt ? 'Browser Wallet' : noExtEn)
                 }
             };
             document.querySelectorAll('[data-wallet-desc]').forEach(el => {
@@ -1535,6 +1554,7 @@
             try {
                 let provider = null;
 
+                // 1. Try wallet-specific provider detection
                 if (walletType === 'metamask') {
                     provider = getMetaMaskProvider();
                 } else if (walletType === 'binance') {
@@ -1549,14 +1569,20 @@
                     provider = eip6963 || (window.tokenpocket?.ethereum) || null;
                 }
 
+                // 2. Fallback: if any extension exists via window.ethereum, use it
+                //    All EVM wallets share the same EIP-1193 API
+                if (!provider && window.ethereum) {
+                    console.log('[Wallet] Specific detection failed, falling back to window.ethereum');
+                    provider = window.ethereum;
+                }
+
                 if (provider) {
                     await connectBrowserWallet(provider);
                 } else {
-                    // No extension → WalletConnect v2 QR code
+                    // 3. No extension at all → WalletConnect v2 QR code
                     if (typeof window.connectWalletConnectV2 === 'function') {
                         await window.connectWalletConnectV2();
                     } else {
-                        // WC v2 not loaded yet, prompt install instead
                         const downloadUrl = walletDownloadLinks[walletType];
                         alertNoExtension(walletType, downloadUrl);
                     }
