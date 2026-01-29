@@ -1382,60 +1382,40 @@
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         }
 
-        // ========== EIP-6963: Modern wallet discovery ==========
-        const discoveredProviders = []; // { info: { name, icon, rdns, uuid }, provider }
-
-        window.addEventListener('eip6963:announceProvider', (event) => {
-            discoveredProviders.push(event.detail);
-            console.log('[EIP-6963] Discovered:', event.detail.info.name, event.detail.info.rdns);
-        });
-        // Request all installed wallets to announce themselves
-        window.dispatchEvent(new Event('eip6963:requestProvider'));
-
-        // Find provider by rdns pattern (e.g. "io.metamask", "com.okex.wallet", "com.binance")
-        function findProviderByRdns(pattern) {
-            const found = discoveredProviders.find(p =>
-                p.info.rdns && p.info.rdns.toLowerCase().includes(pattern.toLowerCase())
-            );
-            return found ? found.provider : null;
+        // ========== Wallet extension detection ==========
+        // Simple and reliable: check the global objects wallets inject
+        function hasMetaMask() {
+            return !!(window.ethereum?.isMetaMask);
+        }
+        function hasBinanceWallet() {
+            return !!(window.binancew3w?.ethereum || window.BinanceChain || window.ethereum?.isBinance);
+        }
+        function hasOkxWallet() {
+            return !!(window.okxwallet || window.okexchain);
+        }
+        // Any browser extension at all?
+        function hasAnyWalletExtension() {
+            return !!(window.ethereum || window.okxwallet || window.okexchain || window.BinanceChain || window.binancew3w);
         }
 
-        // ========== Provider detection for each wallet ==========
-        function getMetaMaskProvider() {
-            // 1. EIP-6963 (most reliable)
-            const eip6963 = findProviderByRdns('io.metamask');
-            if (eip6963) return eip6963;
-            // 2. Multi-provider array (when multiple extensions installed)
-            if (window.ethereum?.providers?.length) {
-                const found = window.ethereum.providers.find(p => p.isMetaMask && !p.isBraveWallet);
-                if (found) return found;
+        // Get the best provider for a specific wallet type
+        function getProvider(walletType) {
+            if (walletType === 'metamask') {
+                if (window.ethereum?.providers?.length) {
+                    const found = window.ethereum.providers.find(p => p.isMetaMask);
+                    if (found) return found;
+                }
+                if (window.ethereum?.isMetaMask) return window.ethereum;
+            } else if (walletType === 'binance') {
+                if (window.binancew3w?.ethereum) return window.binancew3w.ethereum;
+                if (window.BinanceChain) return window.BinanceChain;
+                if (window.ethereum?.isBinance) return window.ethereum;
+            } else if (walletType === 'okx') {
+                if (window.okxwallet) return window.okxwallet;
+                if (window.okexchain) return window.okexchain;
             }
-            // 3. Direct check
-            if (window.ethereum?.isMetaMask) return window.ethereum;
-            return null;
-        }
-
-        function getBinanceProvider() {
-            // 1. New Binance Web3 Wallet extension (2025+)
-            if (window.binancew3w?.ethereum) return window.binancew3w.ethereum;
-            // 2. EIP-6963
-            const eip6963 = findProviderByRdns('com.binance');
-            if (eip6963) return eip6963;
-            // 3. Legacy Binance Chain Wallet
-            if (window.BinanceChain) return window.BinanceChain;
-            // 4. window.ethereum with isBinance flag
-            if (window.ethereum?.isBinance) return window.ethereum;
-            return null;
-        }
-
-        function getOkxProvider() {
-            // 1. OKX dedicated global object
-            if (window.okxwallet) return window.okxwallet;
-            // 2. EIP-6963
-            const eip6963 = findProviderByRdns('com.okex');
-            if (eip6963) return eip6963;
-            // 3. Legacy okexchain
-            if (window.okexchain) return window.okexchain;
+            // General fallback: any extension
+            if (window.ethereum) return window.ethereum;
             return null;
         }
 
@@ -1486,49 +1466,39 @@
 
             // Update descriptions with detection status on desktop
             const mobile = isMobile();
-            const hasWCV2 = typeof window.connectWalletConnectV2 === 'function';
-            const noExtZh = hasWCV2 ? '扫码连接' : '未安装 - 点击安装';
-            const noExtEn = hasWCV2 ? 'Scan QR Code' : 'Not Installed - Click to Install';
-            // Check if ANY extension is available (general fallback)
-            const hasAnyExt = !!window.ethereum;
+            const isZh = currentLanguage === 'zh';
+            const extLabel = isZh ? '浏览器扩展' : 'Browser Extension';
+            const qrLabel = isZh ? '扫码连接' : 'Scan QR Code';
+            const appLabel = isZh ? '唤起 App' : 'Open App';
 
-            // Debug: log detection results
+            // Debug
             console.log('[Wallet Detection]',
                 'ethereum:', !!window.ethereum,
-                'isMetaMask:', window.ethereum?.isMetaMask,
+                'isMetaMask:', !!window.ethereum?.isMetaMask,
                 'okxwallet:', !!window.okxwallet,
-                'binancew3w:', !!window.binancew3w,
                 'BinanceChain:', !!window.BinanceChain,
-                'EIP-6963 providers:', discoveredProviders.map(p => p.info.rdns)
+                'binancew3w:', !!window.binancew3w,
+                'hasAny:', hasAnyWalletExtension()
             );
 
-            function descFor(specificCheck) {
-                if (specificCheck) return currentLanguage === 'zh' ? '已检测到扩展' : 'Extension Detected';
-                if (hasAnyExt) return currentLanguage === 'zh' ? '浏览器钱包' : 'Browser Wallet';
-                return currentLanguage === 'zh' ? noExtZh : noExtEn;
+            const descs = {};
+            if (mobile) {
+                // Mobile: all show "Open App"
+                descs.metamask = descs.binance = descs.okx = appLabel;
+                descs.trust = descs.tokenpocket = descs.imtoken = appLabel;
+            } else {
+                // Desktop: check each wallet, fallback to window.ethereum
+                descs.metamask = (hasMetaMask() || hasAnyWalletExtension()) ? extLabel : qrLabel;
+                descs.binance = (hasBinanceWallet() || hasAnyWalletExtension()) ? extLabel : qrLabel;
+                descs.okx = (hasOkxWallet() || hasAnyWalletExtension()) ? extLabel : qrLabel;
+                // Trust/TokenPocket/imToken: only show "extension" if window.ethereum exists
+                descs.trust = hasAnyWalletExtension() ? extLabel : qrLabel;
+                descs.tokenpocket = hasAnyWalletExtension() ? extLabel : qrLabel;
+                descs.imtoken = hasAnyWalletExtension() ? extLabel : qrLabel;
             }
-
-            const descs = {
-                zh: {
-                    metamask: mobile ? '唤起 App' : descFor(getMetaMaskProvider()),
-                    binance: mobile ? '唤起 App' : descFor(getBinanceProvider()),
-                    okx: mobile ? '唤起 App' : descFor(getOkxProvider()),
-                    trust: mobile ? '唤起 App' : (hasAnyExt ? '浏览器钱包' : noExtZh),
-                    tokenpocket: mobile ? '唤起 App' : (hasAnyExt ? '浏览器钱包' : noExtZh),
-                    imtoken: mobile ? '唤起 App' : (hasAnyExt ? '浏览器钱包' : noExtZh)
-                },
-                en: {
-                    metamask: mobile ? 'Open App' : descFor(getMetaMaskProvider()),
-                    binance: mobile ? 'Open App' : descFor(getBinanceProvider()),
-                    okx: mobile ? 'Open App' : descFor(getOkxProvider()),
-                    trust: mobile ? 'Open App' : (hasAnyExt ? 'Browser Wallet' : noExtEn),
-                    tokenpocket: mobile ? 'Open App' : (hasAnyExt ? 'Browser Wallet' : noExtEn),
-                    imtoken: mobile ? 'Open App' : (hasAnyExt ? 'Browser Wallet' : noExtEn)
-                }
-            };
             document.querySelectorAll('[data-wallet-desc]').forEach(el => {
                 const key = el.getAttribute('data-wallet-desc');
-                el.textContent = descs[currentLanguage][key] || descs['en'][key];
+                if (descs[key]) el.textContent = descs[key];
             });
 
             document.getElementById('walletSelector').classList.add('active');
@@ -1552,34 +1522,15 @@
         // Desktop: try browser extension, or fallback to WalletConnect v2 QR
         async function handleDesktopWallet(walletType) {
             try {
-                let provider = null;
-
-                // 1. Try wallet-specific provider detection
-                if (walletType === 'metamask') {
-                    provider = getMetaMaskProvider();
-                } else if (walletType === 'binance') {
-                    provider = getBinanceProvider();
-                } else if (walletType === 'okx') {
-                    provider = getOkxProvider();
-                } else if (walletType === 'trust') {
-                    const eip6963 = findProviderByRdns('com.trustwallet');
-                    provider = eip6963 || (window.trustwallet) || null;
-                } else if (walletType === 'tokenpocket') {
-                    const eip6963 = findProviderByRdns('pro.tokenpocket');
-                    provider = eip6963 || (window.tokenpocket?.ethereum) || null;
-                }
-
-                // 2. Fallback: if any extension exists via window.ethereum, use it
-                //    All EVM wallets share the same EIP-1193 API
-                if (!provider && window.ethereum) {
-                    console.log('[Wallet] Specific detection failed, falling back to window.ethereum');
-                    provider = window.ethereum;
-                }
+                const provider = getProvider(walletType);
 
                 if (provider) {
+                    // Has extension → connect directly
+                    console.log('[Wallet] Connecting via browser extension for:', walletType);
                     await connectBrowserWallet(provider);
                 } else {
-                    // 3. No extension at all → WalletConnect v2 QR code
+                    // No extension → WalletConnect v2 QR code
+                    console.log('[Wallet] No extension, using WalletConnect v2 QR');
                     if (typeof window.connectWalletConnectV2 === 'function') {
                         await window.connectWalletConnectV2();
                     } else {
