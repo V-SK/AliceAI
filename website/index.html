@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alice AI - Your Personal Crypto AI Assistant 💝</title>
+    
+    <!-- Web3 & WalletConnect -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            padding: 10px 20px;
+            border: 2px solid #F7931A;
+            background: white;
+            color: #F7931A;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background: #F7931A;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #FFF5E6 0%, #FFE4B5 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '₿';
+            position: absolute;
+            font-size: 35em;
+            color: rgba(247, 147, 26, 0.03);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            padding: 40px 20px;
+        }
+
+        .hero-image {
+            width: 350px;
+            height: 350px;
+            margin: 0 auto 50px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 25px 50px rgba(247, 147, 26, 0.25));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+        }
+
+        .hero h1 {
+            font-size: 4em;
+            margin-bottom: 25px;
+            color: #F7931A;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .hero .tagline {
+            font-size: 2em;
+            margin-bottom: 50px;
+            color: #555;
+            font-weight: 400;
+        }
+
+        /* Wallet Section */
+        .wallet-section {
+            margin-top: 40px;
+        }
+
+        .connect-wallet-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 18px 60px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 35px rgba(76, 175, 80, 0.35);
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .connect-wallet-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 50px rgba(76, 175, 80, 0.5);
+        }
+
+        .wallet-info {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .wallet-address {
+            font-size: 1.1em;
+            color: #666;
+            word-break: break-all;
+            margin-bottom: 15px;
+        }
+
+        .wallet-balance {
+            font-size: 1.3em;
+            color: #F7931A;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .bind-telegram-btn {
+            background: linear-gradient(135deg, #0088cc 0%, #006699 100%);
+            color: white;
+            padding: 15px 50px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 136, 204, 0.3);
+        }
+
+        .bind-telegram-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 136, 204, 0.5);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #F7931A 0%, #FFD700 100%);
+            color: white;
+            padding: 22px 70px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.4em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 35px rgba(247, 147, 26, 0.35);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 50px rgba(247, 147, 26, 0.5);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 40px;
+            border-radius: 25px;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-content h3 {
+            font-size: 2em;
+            color: #F7931A;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .bind-code-box {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .bind-code {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #F7931A;
+            letter-spacing: 2px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .modal-instructions {
+            text-align: left;
+            margin: 20px 0;
+            line-height: 2;
+        }
+
+        .modal-instructions p {
+            margin: 10px 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .open-telegram-btn {
+            background: linear-gradient(135deg, #0088cc 0%, #006699 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .open-telegram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 136, 204, 0.4);
+        }
+
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 20px;
+            background: white;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 70px;
+            color: #F7931A;
+            font-weight: 800;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .feature-item .icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .feature-item h3 {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .feature-item .status {
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .feature-item .status.ready {
+            color: #4CAF50;
+        }
+
+        /* Tiers Section */
+        .tiers {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #FFF5E6 0%, #FFE4B5 100%);
+        }
+
+        .tiers h2 {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 70px;
+            color: #F7931A;
+            font-weight: 800;
+        }
+
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tier-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .tier-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .tier-card.featured {
+            border: 3px solid #F7931A;
+            box-shadow: 0 15px 50px rgba(247, 147, 26, 0.3);
+        }
+
+        .tier-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .tier-icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+        }
+
+        .tier-name {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #F7931A;
+            margin-bottom: 10px;
+        }
+
+        .tier-price {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .tier-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tier-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            color: #555;
+            font-size: 1em;
+        }
+
+        .tier-features li:last-child {
+            border-bottom: none;
+        }
+
+        .tier-features li::before {
+            content: '✓';
+            color: #F7931A;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .tier-features li.coming-soon {
+            color: #999;
+        }
+
+        .tier-features li.coming-soon::before {
+            content: '⏳';
+        }
+
+        /* Token Economics Section */
+        .token-economics {
+            padding: 100px 20px;
+            background: white;
+        }
+
+        .token-economics h2 {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 70px;
+            color: #F7931A;
+            font-weight: 800;
+        }
+
+        .token-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #FFF5E6 0%, #FFE4B5 100%);
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(247, 147, 26, 0.2);
+        }
+
+        .token-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .token-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .token-card h3 {
+            font-size: 2.5em;
+            color: #F7931A;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .token-status {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .token-content {
+            text-align: left;
+        }
+
+        .economics-section {
+            margin-bottom: 50px;
+        }
+
+        .economics-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .economics-section h4 {
+            font-size: 1.6em;
+            color: #F7931A;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .tax-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .tax-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .tax-percent {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #F7931A;
+            min-width: 100px;
+            padding-right: 20px;
+        }
+
+        .tax-desc {
+            flex: 1;
+        }
+
+        .tax-desc strong {
+            display: block;
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .tax-desc p {
+            margin: 4px 0;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .payment-info {
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .payment-info p {
+            color: #666;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 80px 20px;
+            text-align: center;
+            background: #2C2C2C;
+            color: white;
+        }
+
+        .footer h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        .footer p {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8em;
+            }
+
+            .hero .tagline {
+                font-size: 1.5em;
+            }
+
+            .hero-image {
+                width: 250px;
+                height: 250px;
+            }
+
+            .features h2, .tiers h2, .token-economics h2 {
+                font-size: 2.2em;
+            }
+
+            .tier-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .token-card {
+                padding: 30px 20px;
+            }
+
+            .tax-item {
+                flex-direction: column;
+            }
+
+            .tax-percent {
+                min-width: auto;
+                padding-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .modal-content {
+                margin: 20% 20px;
+                padding: 30px 20px;
+            }
+
+            .lang-switcher {
+                top: 10px;
+                right: 10px;
+            }
+
+            .lang-btn {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLanguage('zh')" data-lang="zh">🇨🇳 中文</button>
+        <button class="lang-btn" onclick="setLanguage('en')" data-lang="en">🇬🇧 English</button>
+    </div>
+
+    <!-- Bind Modal -->
+    <div id="bindModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeBindModal()">&times;</span>
+            <h3 data-i18n="bind-title">绑定你的 Telegram</h3>
+            
+            <div class="bind-code-box">
+                <p data-i18n="bind-your-code">你的绑定码：</p>
+                <div class="bind-code" id="bindCode">Loading...</div>
+                <button class="copy-btn" onclick="copyBindCode()" data-i18n="copy-button">📋 复制绑定码</button>
+            </div>
+            
+            <div class="modal-instructions">
+                <p data-i18n="bind-step1">1. 点击下方按钮打开 Telegram Bot</p>
+                <p data-i18n="bind-step2">2. 发送你刚复制的绑定码</p>
+                <p data-i18n="bind-step3">3. 等待 Bot 确认绑定成功</p>
+            </div>
+            
+            <button class="open-telegram-btn" onclick="openTelegram()" data-i18n="open-telegram">
+                打开 Telegram Bot →
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-image">
+                <img src="alice-logo.png" alt="Alice.AI" />
+            </div>
+            <h1>Alice AI</h1>
+            <p class="tagline" data-i18n="tagline">你的专属加密货币 AI 助理</p>
+            
+            <!-- Wallet Section -->
+            <div class="wallet-section">
+                <div id="connectSection">
+                    <button class="connect-wallet-btn" onclick="connectWallet()" data-i18n="connect-wallet">
+                        🔗 连接钱包（MetaMask/币安/OKX/Trust Wallet等）
+                    </button>
+                </div>
+                
+                <div id="walletInfo" class="hidden">
+                    <div class="wallet-info">
+                        <div class="wallet-address">
+                            <span data-i18n="wallet-address">钱包地址：</span>
+                            <span id="address">0x...</span>
+                        </div>
+                        <div class="wallet-balance">
+                            <span data-i18n="token-balance">Alice Token：</span>
+                            <span id="balance">0</span>
+                        </div>
+                        <button class="bind-telegram-btn" onclick="openBindModal()" data-i18n="bind-telegram">
+                            绑定 Telegram
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="https://t.me/Alice102_bot" class="cta-button" data-i18n="start-now">立即开始 →</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 data-i18n="features-title">核心特色</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="icon">🤖</div>
+                    <h3 data-i18n="feature1-title">个人 AI 助理</h3>
+                    <p class="status" data-i18n="feature1-desc">专属陪伴</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="icon">🧠</div>
+                    <h3 data-i18n="feature2-title">连续记忆</h3>
+                    <p class="status" data-i18n="feature2-desc">记住你的每次对话</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="icon">💬</div>
+                    <h3 data-i18n="feature3-title">Telegram Bot</h3>
+                    <p class="status ready" data-i18n="feature3-desc">✓ 已就绪</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="icon">💚</div>
+                    <h3 data-i18n="feature4-title">WeChat Bot</h3>
+                    <p class="status" data-i18n="feature4-desc">即将推出</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="icon">✨</div>
+                    <h3 data-i18n="feature5-title">完全智能</h3>
+                    <p class="status" data-i18n="feature5-desc">私人 AI 助手</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tiers Section -->
+    <section class="tiers">
+        <div class="container">
+            <h2 data-i18n="tiers-title">服务等级</h2>
+            <div class="tier-grid">
+                <!-- Bronze Tier -->
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <div class="tier-icon">🥉</div>
+                        <div class="tier-name">Bronze</div>
+                        <div class="tier-price" data-i18n="tier-bronze-price">免费</div>
+                    </div>
+                    <ul class="tier-features">
+                        <li data-i18n="tier-bronze-feat1">基础对话功能</li>
+                        <li data-i18n="tier-bronze-feat2">简单查询</li>
+                        <li data-i18n="tier-bronze-feat3">体验 Alice</li>
+                    </ul>
+                </div>
+
+                <!-- Silver Tier -->
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <div class="tier-icon">🥈</div>
+                        <div class="tier-name">Silver</div>
+                        <div class="tier-price" data-i18n="tier-silver-price">持币解锁</div>
+                    </div>
+                    <ul class="tier-features">
+                        <li data-i18n="tier-silver-feat1">智能价格监控（3个任务）</li>
+                        <li data-i18n="tier-silver-feat2">多维度情报分析</li>
+                        <li data-i18n="tier-silver-feat3">AI 专业建议</li>
+                        <li data-i18n="tier-silver-feat4">新闻 + 情绪 + 趋势</li>
+                    </ul>
+                </div>
+
+                <!-- Gold Tier -->
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <div class="tier-icon">🥇</div>
+                        <div class="tier-name">Gold</div>
+                        <div class="tier-price" data-i18n="tier-gold-price">即将推出</div>
+                    </div>
+                    <ul class="tier-features">
+                        <li data-i18n="tier-gold-feat1">Silver 全部功能</li>
+                        <li data-i18n="tier-gold-feat2">完全智能私人 AI 助手</li>
+                        <li class="coming-soon" data-i18n="tier-gold-feat3">每日深度 AI 报告</li>
+                        <li class="coming-soon" data-i18n="tier-gold-feat4">极速响应（2秒）</li>
+                        <li class="coming-soon" data-i18n="tier-gold-feat5">无限监控任务</li>
+                    </ul>
+                </div>
+
+                <!-- Diamond Tier -->
+                <div class="tier-card featured">
+                    <div class="tier-header">
+                        <div class="tier-icon">💎</div>
+                        <div class="tier-name">Diamond</div>
+                        <div class="tier-price" data-i18n="tier-diamond-price">即将推出</div>
+                    </div>
+                    <ul class="tier-features">
+                        <li data-i18n="tier-diamond-feat1">Gold 全部功能</li>
+                        <li class="coming-soon" data-i18n="tier-diamond-feat2">全自动 X（推特）搜索</li>
+                        <li class="coming-soon" data-i18n="tier-diamond-feat3">实时投资情绪分析</li>
+                        <li class="coming-soon" data-i18n="tier-diamond-feat4">X 真实多空比</li>
+                        <li class="coming-soon" data-i18n="tier-diamond-feat5">技术指标深度分析</li>
+                        <li class="coming-soon" data-i18n="tier-diamond-feat6">全自动买卖</li>
+                        <li class="coming-soon" data-i18n="tier-diamond-feat7">X 爆点主动推送</li>
+                        <li class="coming-soon" data-i18n="tier-diamond-feat8">更多功能敬请期待</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Token Economics Section -->
+    <section class="token-economics">
+        <div class="container">
+            <h2 data-i18n="tokenomics-title">代币经济</h2>
+            
+            <div class="token-card">
+                <div class="token-header">
+                    <div class="token-icon">🪙</div>
+                    <h3>Alice Token</h3>
+                    <p class="token-status" data-i18n="token-coming-soon">即将推出</p>
+                </div>
+                
+                <div class="token-content">
+                    <div class="economics-section">
+                        <h4 data-i18n="tokenomics-tax-title">交易税收机制（3%）</h4>
+                        
+                        <div class="tax-item">
+                            <div class="tax-percent">10%</div>
+                            <div class="tax-desc">
+                                <strong data-i18n="tax1-title">开发团队收入</strong>
+                                <p data-i18n="tax1-detail">税收的 10%（总交易额的 0.3%）</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tax-item">
+                            <div class="tax-percent">15%</div>
+                            <div class="tax-desc">
+                                <strong data-i18n="tax2-title">项目运营开销</strong>
+                                <p data-i18n="tax2-desc">API 密钥、硬件设备、服务器等基础设施</p>
+                                <p data-i18n="tax2-detail">税收的 15%（总交易额的 0.45%）</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tax-item">
+                            <div class="tax-percent">25%</div>
+                            <div class="tax-desc">
+                                <strong data-i18n="tax3-title">BTC 储备基金</strong>
+                                <p data-i18n="tax3-desc">自动购买比特币作为项目长期储备资产</p>
+                                <p data-i18n="tax3-detail">税收的 25%（总交易额的 0.75%）</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tax-item">
+                            <div class="tax-percent">50%</div>
+                            <div class="tax-desc">
+                                <strong data-i18n="tax4-title">DeFi 策略与回报</strong>
+                                <p data-i18n="tax4-desc1">· DeFi Bot 自动交易</p>
+                                <p data-i18n="tax4-desc2">· 质押分红机制</p>
+                                <p data-i18n="tax4-desc3">· 手动回购（包括 BTC 回购）</p>
+                                <p data-i18n="tax4-desc4">· 为项目创造额外收益</p>
+                                <p data-i18n="tax4-detail">税收的 50%（总交易额的 1.5%）</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="economics-section">
+                        <h4 data-i18n="tokenomics-payment-title">付费使用模式</h4>
+                        <div class="payment-info">
+                            <p data-i18n="payment-desc">未来将开通非持币用户的付费订阅服务。所有付费收入将全部用于项目生态发展，包括但不限于功能升级、技术优化、市场推广等，持续提升 Alice AI 的服务质量。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <section class="footer">
+        <div class="container">
+            <h2 data-i18n="footer-title">准备好了吗？</h2>
+            <p data-i18n="footer-desc">立即开始使用 Alice AI，让她成为你的专属加密货币助理</p>
+            <a href="https://t.me/Alice102_bot" class="cta-button" data-i18n="footer-cta">开始使用 →</a>
+        </div>
+    </section>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            TOKEN_CONTRACT: '0x0000000000000000000000000000000000000000', // TODO: Replace with actual contract
+            BSC_CHAIN_ID: '0x38', // BSC Mainnet
+            BSC_RPC_URL: 'https://bsc-dataseed.binance.org/',
+            TELEGRAM_BOT: 'Alice102_bot'
+        };
+
+        // Global variables
+        let web3;
+        let account;
+        let currentLanguage = 'zh';
+
+        // Translations
+        const translations = {
+            zh: {
+                'tagline': '你的专属加密货币 AI 助理',
+                'connect-wallet': '🔗 连接钱包（MetaMask/币安/OKX/Trust Wallet等）',
+                'wallet-address': '钱包地址：',
+                'token-balance': 'Alice Token：',
+                'bind-telegram': '绑定 Telegram',
+                'start-now': '立即开始 →',
+                'bind-title': '绑定你的 Telegram',
+                'bind-your-code': '你的绑定码：',
+                'copy-button': '📋 复制绑定码',
+                'bind-step1': '1. 点击下方按钮打开 Telegram Bot',
+                'bind-step2': '2. 发送你刚复制的绑定码',
+                'bind-step3': '3. 等待 Bot 确认绑定成功',
+                'open-telegram': '打开 Telegram Bot →',
+                'features-title': '核心特色',
+                'feature1-title': '个人 AI 助理',
+                'feature1-desc': '专属陪伴',
+                'feature2-title': '连续记忆',
+                'feature2-desc': '记住你的每次对话',
+                'feature3-title': 'Telegram Bot',
+                'feature3-desc': '✓ 已就绪',
+                'feature4-title': 'WeChat Bot',
+                'feature4-desc': '即将推出',
+                'feature5-title': '完全智能',
+                'feature5-desc': '私人 AI 助手',
+                'tiers-title': '服务等级',
+                'tier-bronze-price': '免费',
+                'tier-bronze-feat1': '基础对话功能',
+                'tier-bronze-feat2': '简单查询',
+                'tier-bronze-feat3': '体验 Alice',
+                'tier-silver-price': '持币解锁',
+                'tier-silver-feat1': '智能价格监控（3个任务）',
+                'tier-silver-feat2': '多维度情报分析',
+                'tier-silver-feat3': 'AI 专业建议',
+                'tier-silver-feat4': '新闻 + 情绪 + 趋势',
+                'tier-gold-price': '即将推出',
+                'tier-gold-feat1': 'Silver 全部功能',
+                'tier-gold-feat2': '完全智能私人 AI 助手',
+                'tier-gold-feat3': '每日深度 AI 报告',
+                'tier-gold-feat4': '极速响应（2秒）',
+                'tier-gold-feat5': '无限监控任务',
+                'tier-diamond-price': '即将推出',
+                'tier-diamond-feat1': 'Gold 全部功能',
+                'tier-diamond-feat2': '全自动 X（推特）搜索',
+                'tier-diamond-feat3': '实时投资情绪分析',
+                'tier-diamond-feat4': 'X 真实多空比',
+                'tier-diamond-feat5': '技术指标深度分析',
+                'tier-diamond-feat6': '全自动买卖',
+                'tier-diamond-feat7': 'X 爆点主动推送',
+                'tier-diamond-feat8': '更多功能敬请期待',
+                'tokenomics-title': '代币经济',
+                'token-coming-soon': '即将推出',
+                'tokenomics-tax-title': '交易税收机制（3%）',
+                'tax1-title': '开发团队收入',
+                'tax1-detail': '税收的 10%（总交易额的 0.3%）',
+                'tax2-title': '项目运营开销',
+                'tax2-desc': 'API 密钥、硬件设备、服务器等基础设施',
+                'tax2-detail': '税收的 15%（总交易额的 0.45%）',
+                'tax3-title': 'BTC 储备基金',
+                'tax3-desc': '自动购买比特币作为项目长期储备资产',
+                'tax3-detail': '税收的 25%（总交易额的 0.75%）',
+                'tax4-title': 'DeFi 策略与回报',
+                'tax4-desc1': '· DeFi Bot 自动交易',
+                'tax4-desc2': '· 质押分红机制',
+                'tax4-desc3': '· 手动回购（包括 BTC 回购）',
+                'tax4-desc4': '· 为项目创造额外收益',
+                'tax4-detail': '税收的 50%（总交易额的 1.5%）',
+                'tokenomics-payment-title': '付费使用模式',
+                'payment-desc': '未来将开通非持币用户的付费订阅服务。所有付费收入将全部用于项目生态发展，包括但不限于功能升级、技术优化、市场推广等，持续提升 Alice AI 的服务质量。',
+                'footer-title': '准备好了吗？',
+                'footer-desc': '立即开始使用 Alice AI，让她成为你的专属加密货币助理',
+                'footer-cta': '开始使用 →'
+            },
+            en: {
+                'tagline': 'Your Personal Crypto AI Assistant',
+                'connect-wallet': '🔗 Connect Wallet (MetaMask/Binance/OKX/Trust Wallet/etc)',
+                'wallet-address': 'Wallet Address: ',
+                'token-balance': 'Alice Token: ',
+                'bind-telegram': 'Bind Telegram',
+                'start-now': 'Start Now →',
+                'bind-title': 'Bind Your Telegram',
+                'bind-your-code': 'Your Bind Code:',
+                'copy-button': '📋 Copy Code',
+                'bind-step1': '1. Click the button below to open Telegram Bot',
+                'bind-step2': '2. Send the bind code you just copied',
+                'bind-step3': '3. Wait for Bot confirmation',
+                'open-telegram': 'Open Telegram Bot →',
+                'features-title': 'Core Features',
+                'feature1-title': 'Personal AI Assistant',
+                'feature1-desc': 'Exclusive Companion',
+                'feature2-title': 'Continuous Memory',
+                'feature2-desc': 'Remember Every Conversation',
+                'feature3-title': 'Telegram Bot',
+                'feature3-desc': '✓ Ready',
+                'feature4-title': 'WeChat Bot',
+                'feature4-desc': 'Coming Soon',
+                'feature5-title': 'Fully Intelligent',
+                'feature5-desc': 'Private AI Assistant',
+                'tiers-title': 'Service Tiers',
+                'tier-bronze-price': 'Free',
+                'tier-bronze-feat1': 'Basic Conversation',
+                'tier-bronze-feat2': 'Simple Queries',
+                'tier-bronze-feat3': 'Experience Alice',
+                'tier-silver-price': 'Hold Tokens to Unlock',
+                'tier-silver-feat1': 'Smart Price Monitoring (3 tasks)',
+                'tier-silver-feat2': 'Multi-dimensional Intelligence',
+                'tier-silver-feat3': 'AI Professional Advice',
+                'tier-silver-feat4': 'News + Sentiment + Trends',
+                'tier-gold-price': 'Coming Soon',
+                'tier-gold-feat1': 'All Silver Features',
+                'tier-gold-feat2': 'Fully Intelligent Private AI Assistant',
+                'tier-gold-feat3': 'Daily In-depth AI Reports',
+                'tier-gold-feat4': 'Lightning Response (2s)',
+                'tier-gold-feat5': 'Unlimited Monitoring Tasks',
+                'tier-diamond-price': 'Coming Soon',
+                'tier-diamond-feat1': 'All Gold Features',
+                'tier-diamond-feat2': 'Auto X (Twitter) Search',
+                'tier-diamond-feat3': 'Real-time Investment Sentiment',
+                'tier-diamond-feat4': 'X Real Long/Short Ratio',
+                'tier-diamond-feat5': 'Technical Indicator Analysis',
+                'tier-diamond-feat6': 'Fully Automated Trading',
+                'tier-diamond-feat7': 'X Hotspot Push Notifications',
+                'tier-diamond-feat8': 'More Features Coming Soon',
+                'tokenomics-title': 'Token Economics',
+                'token-coming-soon': 'Coming Soon',
+                'tokenomics-tax-title': 'Transaction Tax (3%)',
+                'tax1-title': 'Development Team Revenue',
+                'tax1-detail': '10% of tax (0.3% of transaction)',
+                'tax2-title': 'Project Operating Expenses',
+                'tax2-desc': 'API keys, hardware, servers, and infrastructure',
+                'tax2-detail': '15% of tax (0.45% of transaction)',
+                'tax3-title': 'BTC Reserve Fund',
+                'tax3-desc': 'Automatically purchase Bitcoin as long-term reserve',
+                'tax3-detail': '25% of tax (0.75% of transaction)',
+                'tax4-title': 'DeFi Strategy & Returns',
+                'tax4-desc1': '· DeFi Bot Auto Trading',
+                'tax4-desc2': '· Staking Dividend Mechanism',
+                'tax4-desc3': '· Manual Buyback (including BTC)',
+                'tax4-desc4': '· Generate Additional Revenue',
+                'tax4-detail': '50% of tax (1.5% of transaction)',
+                'tokenomics-payment-title': 'Paid Subscription Model',
+                'payment-desc': 'We will offer paid subscriptions for non-token holders. All revenue will be reinvested in ecosystem development, including feature upgrades, technical optimization, and marketing to continuously improve Alice AI service quality.',
+                'footer-title': 'Ready to Start?',
+                'footer-desc': 'Start using Alice AI now and let her be your personal crypto assistant',
+                'footer-cta': 'Get Started →'
+            }
+        };
+
+        // Language switching
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+        }
+
+        // Connect Wallet
+        async function connectWallet() {
+            // Show wallet selection
+            const walletChoice = confirm(
+                currentLanguage === 'zh' 
+                    ? '选择钱包:\n\n点击"确定"使用 MetaMask\n点击"取消"使用 WalletConnect\n（币安/OKX/Trust Wallet/TokenPocket等）'
+                    : 'Choose wallet:\n\nClick "OK" for MetaMask\nClick "Cancel" for WalletConnect\n(Binance/OKX/Trust Wallet/TokenPocket/etc)'
+            );
+
+            if (walletChoice) {
+                // MetaMask
+                await connectMetaMask();
+            } else {
+                // WalletConnect
+                await connectWalletConnect();
+            }
+        }
+
+        // MetaMask Connection
+        async function connectMetaMask() {
+            try {
+                // Check if MetaMask is installed
+                if (typeof window.ethereum === 'undefined') {
+                    alert(currentLanguage === 'zh' ? 
+                        '请先安装 MetaMask 钱包！' : 
+                        'Please install MetaMask first!');
+                    window.open('https://metamask.io/download/', '_blank');
+                    return;
+                }
+
+                // Request account access
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                account = accounts[0];
+
+                // Initialize Web3
+                web3 = new Web3(window.ethereum);
+
+                // Check and switch to BSC
+                await switchToBSC();
+
+                // Display wallet info
+                displayWalletInfo(account);
+
+                // Get token balance
+                await updateTokenBalance(account);
+
+            } catch (error) {
+                console.error('Error connecting MetaMask:', error);
+                alert(currentLanguage === 'zh' ? 
+                    '连接 MetaMask 失败！' : 
+                    'Failed to connect MetaMask!');
+            }
+        }
+
+        // WalletConnect Connection
+        async function connectWalletConnect() {
+            try {
+                // Create WalletConnect Provider
+                const provider = new WalletConnectProvider.default({
+                    rpc: {
+                        56: CONFIG.BSC_RPC_URL,
+                    },
+                    chainId: 56,
+                    qrcodeModalOptions: {
+                        mobileLinks: [
+                            "metamask",
+                            "trust",
+                            "binance",
+                            "okex",
+                            "tokenpocket",
+                            "imtoken",
+                            "rainbow",
+                            "argent",
+                        ],
+                    },
+                });
+
+                // Enable session (triggers QR Code modal)
+                await provider.enable();
+
+                // Initialize Web3
+                web3 = new Web3(provider);
+
+                // Get accounts
+                const accounts = await web3.eth.getAccounts();
+                account = accounts[0];
+
+                // Display wallet info
+                displayWalletInfo(account);
+
+                // Get token balance
+                await updateTokenBalance(account);
+
+                // Subscribe to events
+                provider.on("accountsChanged", (accounts) => {
+                    if (accounts.length === 0) {
+                        // Disconnected
+                        document.getElementById('connectSection').classList.remove('hidden');
+                        document.getElementById('walletInfo').classList.add('hidden');
+                    } else {
+                        account = accounts[0];
+                        displayWalletInfo(account);
+                        updateTokenBalance(account);
+                    }
+                });
+
+                provider.on("disconnect", () => {
+                    document.getElementById('connectSection').classList.remove('hidden');
+                    document.getElementById('walletInfo').classList.add('hidden');
+                });
+
+            } catch (error) {
+                console.error('Error connecting WalletConnect:', error);
+                alert(currentLanguage === 'zh' ? 
+                    '连接失败！请重试。' : 
+                    'Connection failed! Please try again.');
+            }
+        }
+
+        // Switch to BSC Network
+        async function switchToBSC() {
+            const chainId = await web3.eth.getChainId();
+            if (chainId !== 56) { // BSC Mainnet
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: CONFIG.BSC_CHAIN_ID }],
+                    });
+                } catch (switchError) {
+                    // Chain not added, try to add it
+                    if (switchError.code === 4902) {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: CONFIG.BSC_CHAIN_ID,
+                                chainName: 'Binance Smart Chain',
+                                nativeCurrency: {
+                                    name: 'BNB',
+                                    symbol: 'BNB',
+                                    decimals: 18
+                                },
+                                rpcUrls: [CONFIG.BSC_RPC_URL],
+                                blockExplorerUrls: ['https://bscscan.com/']
+                            }]
+                        });
+                    }
+                }
+            }
+        }
+
+        // Display wallet info
+        function displayWalletInfo(address) {
+            document.getElementById('connectSection').classList.add('hidden');
+            document.getElementById('walletInfo').classList.remove('hidden');
+            
+            // Format address
+            const shortAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
+            document.getElementById('address').textContent = shortAddress;
+        }
+
+        // Update token balance
+        async function updateTokenBalance(address) {
+            try {
+                // TODO: Replace with actual token contract call
+                // For now, show placeholder
+                document.getElementById('balance').textContent = '0 (Contract not deployed yet)';
+                
+                // Actual implementation after contract is deployed:
+                /*
+                const tokenContract = new web3.eth.Contract(ERC20_ABI, CONFIG.TOKEN_CONTRACT);
+                const balance = await tokenContract.methods.balanceOf(address).call();
+                const decimals = await tokenContract.methods.decimals().call();
+                const formattedBalance = (balance / Math.pow(10, decimals)).toFixed(2);
+                document.getElementById('balance').textContent = formattedBalance;
+                */
+            } catch (error) {
+                console.error('Error getting balance:', error);
+                document.getElementById('balance').textContent = 'Error';
+            }
+        }
+
+        // Generate bind code
+        function generateBindCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = 'ALICE-';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            code += '-';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        // Open bind modal
+        function openBindModal() {
+            if (!account) {
+                alert(currentLanguage === 'zh' ? 
+                    '请先连接钱包！' : 
+                    'Please connect wallet first!');
+                return;
+            }
+
+            const bindCode = generateBindCode();
+            document.getElementById('bindCode').textContent = bindCode;
+            document.getElementById('bindModal').style.display = 'block';
+
+            // TODO: Send bind code to backend
+            // Store the association: bindCode <-> wallet address
+        }
+
+        // Close bind modal
+        function closeBindModal() {
+            document.getElementById('bindModal').style.display = 'none';
+        }
+
+        // Copy bind code
+        function copyBindCode() {
+            const code = document.getElementById('bindCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert(currentLanguage === 'zh' ? 
+                    '绑定码已复制！现在去 Telegram 粘贴吧！' : 
+                    'Bind code copied! Now paste it in Telegram!');
+            });
+        }
+
+        // Open Telegram
+        function openTelegram() {
+            window.open(`https://t.me/${CONFIG.TELEGRAM_BOT}`, '_blank');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('bindModal');
+            if (event.target == modal) {
+                closeBindModal();
+            }
+        }
+
+        // Listen for account changes
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', function (accounts) {
+                if (accounts.length === 0) {
+                    // User disconnected
+                    document.getElementById('connectSection').classList.remove('hidden');
+                    document.getElementById('walletInfo').classList.add('hidden');
+                } else {
+                    account = accounts[0];
+                    displayWalletInfo(account);
+                    updateTokenBalance(account);
+                }
+            });
+
+            window.ethereum.on('chainChanged', function (chainId) {
+                window.location.reload();
+            });
+        }
+    </script>
+</body>
+</html>

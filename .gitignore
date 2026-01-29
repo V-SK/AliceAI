@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+
+# Database
+*.db
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# Bot source code (keep private)
+*.py
+Dockerfile*
+docker-compose.yml
+requirements.txt
+
+# Docs (private)
+*.md
+
+# Data
+data/
+
+# Backups
+*_backup*
+*_old*
+
+# System
+.DS_Store
+
+# Claude
+Claude/
