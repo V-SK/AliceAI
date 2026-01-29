@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alice AI - Your Personal Crypto AI Assistant 💝</title>
     
-    <!-- Web3 & WalletConnect -->
+    <!-- Web3 -->
     <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
     
     <style>
         * {
@@ -1315,7 +1314,64 @@
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         }
 
-        // Deep link configurations
+        // ========== EIP-6963: Modern wallet discovery ==========
+        const discoveredProviders = []; // { info: { name, icon, rdns, uuid }, provider }
+
+        window.addEventListener('eip6963:announceProvider', (event) => {
+            discoveredProviders.push(event.detail);
+            console.log('[EIP-6963] Discovered:', event.detail.info.name, event.detail.info.rdns);
+        });
+        // Request all installed wallets to announce themselves
+        window.dispatchEvent(new Event('eip6963:requestProvider'));
+
+        // Find provider by rdns pattern (e.g. "io.metamask", "com.okex.wallet", "com.binance")
+        function findProviderByRdns(pattern) {
+            const found = discoveredProviders.find(p =>
+                p.info.rdns && p.info.rdns.toLowerCase().includes(pattern.toLowerCase())
+            );
+            return found ? found.provider : null;
+        }
+
+        // ========== Provider detection for each wallet ==========
+        function getMetaMaskProvider() {
+            // 1. EIP-6963 (most reliable)
+            const eip6963 = findProviderByRdns('io.metamask');
+            if (eip6963) return eip6963;
+            // 2. Multi-provider array (when multiple extensions installed)
+            if (window.ethereum?.providers?.length) {
+                const found = window.ethereum.providers.find(p => p.isMetaMask && !p.isBraveWallet);
+                if (found) return found;
+            }
+            // 3. Direct check
+            if (window.ethereum?.isMetaMask) return window.ethereum;
+            return null;
+        }
+
+        function getBinanceProvider() {
+            // 1. New Binance Web3 Wallet extension (2025+)
+            if (window.binancew3w?.ethereum) return window.binancew3w.ethereum;
+            // 2. EIP-6963
+            const eip6963 = findProviderByRdns('com.binance');
+            if (eip6963) return eip6963;
+            // 3. Legacy Binance Chain Wallet
+            if (window.BinanceChain) return window.BinanceChain;
+            // 4. window.ethereum with isBinance flag
+            if (window.ethereum?.isBinance) return window.ethereum;
+            return null;
+        }
+
+        function getOkxProvider() {
+            // 1. OKX dedicated global object
+            if (window.okxwallet) return window.okxwallet;
+            // 2. EIP-6963
+            const eip6963 = findProviderByRdns('com.okex');
+            if (eip6963) return eip6963;
+            // 3. Legacy okexchain
+            if (window.okexchain) return window.okexchain;
+            return null;
+        }
+
+        // Deep link configurations (mobile only)
         const walletDeepLinks = {
             metamask: {
                 url: `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`,
@@ -1343,17 +1399,42 @@
             }
         };
 
+        // Download links for desktop extension install prompts
+        const walletDownloadLinks = {
+            metamask: 'https://metamask.io/download/',
+            binance: 'https://www.bnbchain.org/en/binance-wallet',
+            okx: 'https://www.okx.com/web3',
+            trust: 'https://trustwallet.com/browser-extension',
+            tokenpocket: 'https://extension.tokenpocket.pro/',
+            imtoken: 'https://token.im/download'
+        };
+
         // Open wallet selector modal
         function connectWallet() {
-            // Update modal text based on language
             document.getElementById('walletSelectorTitle').textContent =
                 currentLanguage === 'zh' ? '选择钱包' : 'Select Wallet';
             document.getElementById('walletDividerText').textContent =
                 currentLanguage === 'zh' ? '更多钱包' : 'More Wallets';
 
+            // Update descriptions with detection status on desktop
+            const mobile = isMobile();
             const descs = {
-                zh: { metamask: '浏览器扩展 / App', binance: '币安钱包', okx: 'OKX 钱包', trust: 'Trust 钱包', tokenpocket: 'TokenPocket 钱包', imtoken: 'imToken 钱包' },
-                en: { metamask: 'Browser Extension / App', binance: 'Binance Wallet', okx: 'OKX Wallet', trust: 'Trust Wallet', tokenpocket: 'TokenPocket Wallet', imtoken: 'imToken Wallet' }
+                zh: {
+                    metamask: mobile ? '唤起 App' : (getMetaMaskProvider() ? '已检测到扩展' : '未安装 - 点击安装'),
+                    binance: mobile ? '唤起 App' : (getBinanceProvider() ? '已检测到扩展' : '未安装 - 点击安装'),
+                    okx: mobile ? '唤起 App' : (getOkxProvider() ? '已检测到扩展' : '未安装 - 点击安装'),
+                    trust: mobile ? '唤起 App' : '桌面扩展 / 安装',
+                    tokenpocket: mobile ? '唤起 App' : '桌面扩展 / 安装',
+                    imtoken: mobile ? '唤起 App' : '移动端钱包 - 点击下载'
+                },
+                en: {
+                    metamask: mobile ? 'Open App' : (getMetaMaskProvider() ? 'Extension Detected' : 'Not Installed - Click to Install'),
+                    binance: mobile ? 'Open App' : (getBinanceProvider() ? 'Extension Detected' : 'Not Installed - Click to Install'),
+                    okx: mobile ? 'Open App' : (getOkxProvider() ? 'Extension Detected' : 'Not Installed - Click to Install'),
+                    trust: mobile ? 'Open App' : 'Desktop Extension / Install',
+                    tokenpocket: mobile ? 'Open App' : 'Desktop Extension / Install',
+                    imtoken: mobile ? 'Open App' : 'Mobile Wallet - Click to Download'
+                }
             };
             document.querySelectorAll('[data-wallet-desc]').forEach(el => {
                 const key = el.getAttribute('data-wallet-desc');
@@ -1378,30 +1459,32 @@
             }
         }
 
-        // Desktop: try browser extension first, fallback to WalletConnect QR
+        // Desktop: try browser extension, or prompt to install
         async function handleDesktopWallet(walletType) {
             try {
+                let provider = null;
+
                 if (walletType === 'metamask') {
-                    if (window.ethereum && window.ethereum.isMetaMask) {
-                        await connectBrowserWallet(window.ethereum);
-                    } else {
-                        alertNoExtension('MetaMask', 'https://metamask.io/download/');
-                    }
+                    provider = getMetaMaskProvider();
                 } else if (walletType === 'binance') {
-                    if (window.BinanceChain) {
-                        await connectBrowserWallet(window.BinanceChain);
-                    } else {
-                        await connectWalletConnectQR();
-                    }
+                    provider = getBinanceProvider();
                 } else if (walletType === 'okx') {
-                    if (window.okxwallet) {
-                        await connectBrowserWallet(window.okxwallet);
-                    } else {
-                        await connectWalletConnectQR();
-                    }
+                    provider = getOkxProvider();
+                } else if (walletType === 'trust') {
+                    // Trust Wallet also has a browser extension now
+                    const eip6963 = findProviderByRdns('com.trustwallet');
+                    provider = eip6963 || (window.trustwallet) || null;
+                } else if (walletType === 'tokenpocket') {
+                    const eip6963 = findProviderByRdns('pro.tokenpocket');
+                    provider = eip6963 || (window.tokenpocket?.ethereum) || null;
+                }
+
+                if (provider) {
+                    await connectBrowserWallet(provider);
                 } else {
-                    // Trust, TokenPocket, imToken → WalletConnect QR on desktop
-                    await connectWalletConnectQR();
+                    // No extension found → prompt to install
+                    const downloadUrl = walletDownloadLinks[walletType];
+                    alertNoExtension(walletType, downloadUrl);
                 }
             } catch (error) {
                 handleConnectionError(error);
@@ -1421,10 +1504,7 @@
             }
 
             const deepLink = walletDeepLinks[walletType];
-            if (!deepLink) {
-                await connectWalletConnectQR();
-                return;
-            }
+            if (!deepLink) return;
 
             // Try deep link
             const startTime = Date.now();
@@ -1434,8 +1514,8 @@
             setTimeout(() => {
                 if (Date.now() - startTime < 4000 && !document.hidden) {
                     const msg = currentLanguage === 'zh'
-                        ? `未检测到该钱包 App，是否前往下载？`
-                        : `Wallet app not detected. Download it?`;
+                        ? '未检测到该钱包 App，是否前往下载？'
+                        : 'Wallet app not detected. Download it?';
                     if (confirm(msg)) {
                         window.open(deepLink.fallback, '_blank');
                     }
@@ -1443,82 +1523,46 @@
             }, 2500);
         }
 
-        // Connect via browser extension (MetaMask, Binance, OKX)
+        // Track the active provider for switchToBSC
+        let activeProvider = null;
+
+        // Connect via browser extension
         async function connectBrowserWallet(provider) {
+            activeProvider = provider;
             const accounts = await provider.request({ method: 'eth_requestAccounts' });
             account = accounts[0];
             web3 = new Web3(provider);
-            await switchToBSC();
+            await switchToBSC(provider);
             displayWalletInfo(account);
             await updateTokenBalance(account);
-        }
 
-        // Connect via WalletConnect QR code
-        async function connectWalletConnectQR() {
-            try {
-                const provider = new WalletConnectProvider.default({
-                    rpc: {
-                        56: CONFIG.BSC_RPC_URL,
-                    },
-                    chainId: 56,
-                    qrcode: true,
-                    qrcodeModalOptions: {
-                        mobileLinks: [
-                            "metamask",
-                            "trust",
-                            "binance",
-                            "okex",
-                            "tokenpocket",
-                            "imtoken",
-                            "rainbow",
-                            "argent",
-                        ],
-                    },
-                });
-
-                await provider.enable();
-                web3 = new Web3(provider);
-
-                const accounts = await web3.eth.getAccounts();
-                account = accounts[0];
-
-                // Check chain
-                const chainId = await web3.eth.getChainId();
-                if (chainId !== 56) {
-                    const msg = currentLanguage === 'zh'
-                        ? '请在钱包中切换到 BSC 主网！'
-                        : 'Please switch to BSC Mainnet in your wallet!';
-                    alert(msg);
-                }
-
-                displayWalletInfo(account);
-                await updateTokenBalance(account);
-
-                provider.on("accountsChanged", (accounts) => {
-                    if (accounts.length === 0) {
+            // Listen for account/chain changes on this provider
+            if (provider.on) {
+                provider.on('accountsChanged', (accs) => {
+                    if (accs.length === 0) {
                         document.getElementById('connectSection').classList.remove('hidden');
                         document.getElementById('walletInfo').classList.add('hidden');
                     } else {
-                        account = accounts[0];
+                        account = accs[0];
                         displayWalletInfo(account);
                         updateTokenBalance(account);
                     }
                 });
-
-                provider.on("disconnect", () => {
-                    document.getElementById('connectSection').classList.remove('hidden');
-                    document.getElementById('walletInfo').classList.add('hidden');
+                provider.on('chainChanged', () => {
+                    window.location.reload();
                 });
-
-            } catch (error) {
-                handleConnectionError(error);
             }
         }
 
-        function alertNoExtension(name, downloadUrl) {
+        function alertNoExtension(walletType, downloadUrl) {
+            const names = {
+                metamask: 'MetaMask', binance: 'Binance Wallet', okx: 'OKX Wallet',
+                trust: 'Trust Wallet', tokenpocket: 'TokenPocket', imtoken: 'imToken'
+            };
+            const name = names[walletType] || walletType;
             const msg = currentLanguage === 'zh'
-                ? `未检测到 ${name} 扩展，是否前往安装？`
-                : `${name} extension not detected. Install it?`;
+                ? `未检测到 ${name} 浏览器扩展。\n\n请安装扩展后刷新页面重试。\n\n点击"确定"前往安装页面。`
+                : `${name} browser extension not detected.\n\nPlease install the extension and refresh.\n\nClick "OK" to open the install page.`;
             if (confirm(msg)) {
                 window.open(downloadUrl, '_blank');
             }
@@ -1537,19 +1581,23 @@
             alert(msg);
         }
 
-        // Switch to BSC Network
-        async function switchToBSC() {
-            const chainId = await web3.eth.getChainId();
-            if (chainId !== 56) { // BSC Mainnet
-                try {
-                    await window.ethereum.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: CONFIG.BSC_CHAIN_ID }],
-                    });
-                } catch (switchError) {
-                    // Chain not added, try to add it
-                    if (switchError.code === 4902) {
-                        await window.ethereum.request({
+        // Switch to BSC Network — uses the actual connected provider, not window.ethereum
+        async function switchToBSC(provider) {
+            if (!provider) provider = activeProvider || window.ethereum;
+            if (!provider) return;
+
+            try {
+                const chainId = await web3.eth.getChainId();
+                if (chainId === 56) return; // Already on BSC
+
+                await provider.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: CONFIG.BSC_CHAIN_ID }],
+                });
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    try {
+                        await provider.request({
                             method: 'wallet_addEthereumChain',
                             params: [{
                                 chainId: CONFIG.BSC_CHAIN_ID,
@@ -1563,6 +1611,8 @@
                                 blockExplorerUrls: ['https://bscscan.com/']
                             }]
                         });
+                    } catch (addError) {
+                        console.error('Failed to add BSC chain:', addError);
                     }
                 }
             }
@@ -1658,24 +1708,10 @@
             }
         }
 
-        // Listen for account changes
-        if (window.ethereum) {
-            window.ethereum.on('accountsChanged', function (accounts) {
-                if (accounts.length === 0) {
-                    // User disconnected
-                    document.getElementById('connectSection').classList.remove('hidden');
-                    document.getElementById('walletInfo').classList.add('hidden');
-                } else {
-                    account = accounts[0];
-                    displayWalletInfo(account);
-                    updateTokenBalance(account);
-                }
-            });
-
-            window.ethereum.on('chainChanged', function (chainId) {
-                window.location.reload();
-            });
-        }
+        // Re-request EIP-6963 after a brief delay (some extensions inject late)
+        setTimeout(() => {
+            window.dispatchEvent(new Event('eip6963:requestProvider'));
+        }, 500);
     </script>
 </body>
 </html>
