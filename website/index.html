@@ -1680,21 +1680,32 @@
             document.getElementById('address').textContent = shortAddress;
         }
 
+        // Minimal ERC-20 ABI
+        const ERC20_ABI = [
+            {"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"stateMutability":"view","type":"function"}
+        ];
+
         // Update token balance
         async function updateTokenBalance(address) {
             try {
-                // TODO: Replace with actual token contract call
-                // For now, show placeholder
-                document.getElementById('balance').textContent = '0 (Contract not deployed yet)';
-                
-                // Actual implementation after contract is deployed:
-                /*
-                const tokenContract = new web3.eth.Contract(ERC20_ABI, CONFIG.TOKEN_CONTRACT);
-                const balance = await tokenContract.methods.balanceOf(address).call();
-                const decimals = await tokenContract.methods.decimals().call();
-                const formattedBalance = (balance / Math.pow(10, decimals)).toFixed(2);
-                document.getElementById('balance').textContent = formattedBalance;
-                */
+                // Use BSC RPC directly to ensure we always query BSC
+                const rpcWeb3 = new Web3(CONFIG.BSC_RPC_URL);
+                const contract = new rpcWeb3.eth.Contract(ERC20_ABI, CONFIG.TOKEN_CONTRACT);
+
+                const [rawBalance, decimals, symbol] = await Promise.all([
+                    contract.methods.balanceOf(address).call(),
+                    contract.methods.decimals().call(),
+                    contract.methods.symbol().call()
+                ]);
+
+                const balance = Number(rawBalance) / Math.pow(10, Number(decimals));
+                const formatted = balance.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+                document.getElementById('balance').textContent = formatted + ' ' + symbol;
             } catch (error) {
                 console.error('Error getting balance:', error);
                 document.getElementById('balance').textContent = 'Error';
