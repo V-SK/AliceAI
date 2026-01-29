@@ -1727,20 +1727,33 @@
         }
 
         // Open bind modal
-        function openBindModal() {
-            if (!account) {
-                alert(currentLanguage === 'zh' ? 
-                    '请先连接钱包！' : 
+        async function openBindModal() {
+            let walletAddress = account || window.account;
+
+            if (!walletAddress && web3) {
+                try {
+                    const accs = await web3.eth.getAccounts();
+                    walletAddress = accs[0];
+                } catch(e) {}
+            }
+            if (!walletAddress && window.ethereum) {
+                try {
+                    const accs = await window.ethereum.request({ method: 'eth_accounts' });
+                    walletAddress = accs[0];
+                } catch(e) {}
+            }
+
+            if (!walletAddress) {
+                alert(currentLanguage === 'zh' ?
+                    '请先连接钱包！' :
                     'Please connect wallet first!');
                 return;
             }
 
+            account = walletAddress;
             const bindCode = generateBindCode();
             document.getElementById('bindCode').textContent = bindCode;
             document.getElementById('bindModal').style.display = 'block';
-
-            // TODO: Send bind code to backend
-            // Store the association: bindCode <-> wallet address
         }
 
         // Close bind modal
