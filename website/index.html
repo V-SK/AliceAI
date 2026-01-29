@@ -647,6 +647,160 @@
         .hidden {
             display: none;
         }
+
+        /* Wallet Selector Modal */
+        .wallet-overlay {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .wallet-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wallet-modal {
+            background: white;
+            border-radius: 25px;
+            max-width: 460px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+            padding: 30px;
+        }
+
+        .wallet-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .wallet-modal-header h3 {
+            font-size: 1.5em;
+            color: #333;
+            margin: 0;
+        }
+
+        .wallet-modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #f0f0f0;
+            color: #666;
+            font-size: 1.3em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-modal-close:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            margin: 8px 0;
+            border: 2px solid #f0f0f0;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .wallet-option:hover {
+            border-color: #F7931A;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(247, 147, 26, 0.15);
+        }
+
+        .wallet-option-icon {
+            font-size: 2em;
+            margin-right: 16px;
+            width: 44px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .wallet-option-info {
+            flex: 1;
+        }
+
+        .wallet-option-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .wallet-option-desc {
+            font-size: 0.8em;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .wallet-option-arrow {
+            color: #ccc;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .wallet-option:hover .wallet-option-arrow {
+            color: #F7931A;
+        }
+
+        .wallet-divider {
+            display: flex;
+            align-items: center;
+            margin: 16px 0;
+            color: #ccc;
+            font-size: 0.85em;
+        }
+
+        .wallet-divider::before,
+        .wallet-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #eee;
+        }
+
+        .wallet-divider span {
+            padding: 0 12px;
+        }
+
+        @media (max-width: 768px) {
+            .wallet-modal {
+                width: 95%;
+                margin: 0 10px;
+                padding: 24px 18px;
+                max-height: 80vh;
+            }
+
+            .wallet-option {
+                padding: 14px 16px;
+            }
+
+            .wallet-option-icon {
+                font-size: 1.7em;
+                width: 38px;
+                margin-right: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -680,6 +834,72 @@
         </div>
     </div>
 
+    <!-- Wallet Selector Modal -->
+    <div id="walletSelector" class="wallet-overlay" onclick="if(event.target===this)closeWalletSelector()">
+        <div class="wallet-modal">
+            <div class="wallet-modal-header">
+                <h3 id="walletSelectorTitle">选择钱包</h3>
+                <button class="wallet-modal-close" onclick="closeWalletSelector()">&times;</button>
+            </div>
+
+            <div onclick="selectWallet('metamask')" class="wallet-option">
+                <div class="wallet-option-icon">🦊</div>
+                <div class="wallet-option-info">
+                    <div class="wallet-option-name">MetaMask</div>
+                    <div class="wallet-option-desc" data-wallet-desc="metamask">浏览器扩展 / App</div>
+                </div>
+                <div class="wallet-option-arrow">›</div>
+            </div>
+
+            <div onclick="selectWallet('binance')" class="wallet-option">
+                <div class="wallet-option-icon">🟡</div>
+                <div class="wallet-option-info">
+                    <div class="wallet-option-name">Binance Wallet</div>
+                    <div class="wallet-option-desc" data-wallet-desc="binance">币安钱包</div>
+                </div>
+                <div class="wallet-option-arrow">›</div>
+            </div>
+
+            <div onclick="selectWallet('okx')" class="wallet-option">
+                <div class="wallet-option-icon">⚫</div>
+                <div class="wallet-option-info">
+                    <div class="wallet-option-name">OKX Wallet</div>
+                    <div class="wallet-option-desc" data-wallet-desc="okx">OKX 钱包</div>
+                </div>
+                <div class="wallet-option-arrow">›</div>
+            </div>
+
+            <div class="wallet-divider"><span id="walletDividerText">更多钱包</span></div>
+
+            <div onclick="selectWallet('trust')" class="wallet-option">
+                <div class="wallet-option-icon">🔵</div>
+                <div class="wallet-option-info">
+                    <div class="wallet-option-name">Trust Wallet</div>
+                    <div class="wallet-option-desc" data-wallet-desc="trust">Trust 钱包</div>
+                </div>
+                <div class="wallet-option-arrow">›</div>
+            </div>
+
+            <div onclick="selectWallet('tokenpocket')" class="wallet-option">
+                <div class="wallet-option-icon">💼</div>
+                <div class="wallet-option-info">
+                    <div class="wallet-option-name">TokenPocket</div>
+                    <div class="wallet-option-desc" data-wallet-desc="tokenpocket">TokenPocket 钱包</div>
+                </div>
+                <div class="wallet-option-arrow">›</div>
+            </div>
+
+            <div onclick="selectWallet('imtoken')" class="wallet-option">
+                <div class="wallet-option-icon">💰</div>
+                <div class="wallet-option-info">
+                    <div class="wallet-option-name">imToken</div>
+                    <div class="wallet-option-desc" data-wallet-desc="imtoken">imToken 钱包</div>
+                </div>
+                <div class="wallet-option-arrow">›</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
@@ -693,7 +913,7 @@
             <div class="wallet-section">
                 <div id="connectSection">
                     <button class="connect-wallet-btn" onclick="connectWallet()" data-i18n="connect-wallet">
-                        🔗 连接钱包（MetaMask/币安/OKX/Trust Wallet等）
+                        🔗 连接钱包
                     </button>
                 </div>
                 
@@ -921,7 +1141,7 @@
         const translations = {
             zh: {
                 'tagline': '你的专属加密货币 AI 助理',
-                'connect-wallet': '🔗 连接钱包（MetaMask/币安/OKX/Trust Wallet等）',
+                'connect-wallet': '🔗 连接钱包',
                 'wallet-address': '钱包地址：',
                 'token-balance': 'Alice Token：',
                 'bind-telegram': '绑定 Telegram',
@@ -994,7 +1214,7 @@
             },
             en: {
                 'tagline': 'Your Personal Crypto AI Assistant',
-                'connect-wallet': '🔗 Connect Wallet (MetaMask/Binance/OKX/Trust Wallet/etc)',
+                'connect-wallet': '🔗 Connect Wallet',
                 'wallet-address': 'Wallet Address: ',
                 'token-balance': 'Alice Token: ',
                 'bind-telegram': 'Bind Telegram',
@@ -1090,71 +1310,158 @@
             document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
         }
 
-        // Connect Wallet
-        async function connectWallet() {
-            // Show wallet selection
-            const walletChoice = confirm(
-                currentLanguage === 'zh' 
-                    ? '选择钱包:\n\n点击"确定"使用 MetaMask\n点击"取消"使用 WalletConnect\n（币安/OKX/Trust Wallet/TokenPocket等）'
-                    : 'Choose wallet:\n\nClick "OK" for MetaMask\nClick "Cancel" for WalletConnect\n(Binance/OKX/Trust Wallet/TokenPocket/etc)'
-            );
+        // Mobile detection
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
 
-            if (walletChoice) {
-                // MetaMask
-                await connectMetaMask();
+        // Deep link configurations
+        const walletDeepLinks = {
+            metamask: {
+                url: `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`,
+                fallback: 'https://metamask.io/download/'
+            },
+            binance: {
+                url: `bnc://app.binance.com/cedefi/web3-dapp?url=${encodeURIComponent(window.location.href)}`,
+                fallback: 'https://www.binance.com/en/web3wallet'
+            },
+            okx: {
+                url: `okex://main/dapp/details?dappUrl=${encodeURIComponent(window.location.href)}`,
+                fallback: 'https://www.okx.com/download'
+            },
+            trust: {
+                url: `trust://open_url?coin_id=20000714&url=${encodeURIComponent(window.location.href)}`,
+                fallback: 'https://trustwallet.com/download'
+            },
+            tokenpocket: {
+                url: `tpdapp://open?params=${encodeURIComponent(JSON.stringify({url: window.location.href, chain: 'BSC'}))}`,
+                fallback: 'https://www.tokenpocket.pro/en/download/app'
+            },
+            imtoken: {
+                url: `imtokenv2://navigate/DappView?url=${encodeURIComponent(window.location.href)}`,
+                fallback: 'https://token.im/download'
+            }
+        };
+
+        // Open wallet selector modal
+        function connectWallet() {
+            // Update modal text based on language
+            document.getElementById('walletSelectorTitle').textContent =
+                currentLanguage === 'zh' ? '选择钱包' : 'Select Wallet';
+            document.getElementById('walletDividerText').textContent =
+                currentLanguage === 'zh' ? '更多钱包' : 'More Wallets';
+
+            const descs = {
+                zh: { metamask: '浏览器扩展 / App', binance: '币安钱包', okx: 'OKX 钱包', trust: 'Trust 钱包', tokenpocket: 'TokenPocket 钱包', imtoken: 'imToken 钱包' },
+                en: { metamask: 'Browser Extension / App', binance: 'Binance Wallet', okx: 'OKX Wallet', trust: 'Trust Wallet', tokenpocket: 'TokenPocket Wallet', imtoken: 'imToken Wallet' }
+            };
+            document.querySelectorAll('[data-wallet-desc]').forEach(el => {
+                const key = el.getAttribute('data-wallet-desc');
+                el.textContent = descs[currentLanguage][key] || descs['en'][key];
+            });
+
+            document.getElementById('walletSelector').classList.add('active');
+        }
+
+        function closeWalletSelector() {
+            document.getElementById('walletSelector').classList.remove('active');
+        }
+
+        // Handle wallet selection
+        async function selectWallet(walletType) {
+            closeWalletSelector();
+
+            if (isMobile()) {
+                await handleMobileWallet(walletType);
             } else {
-                // WalletConnect
-                await connectWalletConnect();
+                await handleDesktopWallet(walletType);
             }
         }
 
-        // MetaMask Connection
-        async function connectMetaMask() {
+        // Desktop: try browser extension first, fallback to WalletConnect QR
+        async function handleDesktopWallet(walletType) {
             try {
-                // Check if MetaMask is installed
-                if (typeof window.ethereum === 'undefined') {
-                    alert(currentLanguage === 'zh' ? 
-                        '请先安装 MetaMask 钱包！' : 
-                        'Please install MetaMask first!');
-                    window.open('https://metamask.io/download/', '_blank');
-                    return;
+                if (walletType === 'metamask') {
+                    if (window.ethereum && window.ethereum.isMetaMask) {
+                        await connectBrowserWallet(window.ethereum);
+                    } else {
+                        alertNoExtension('MetaMask', 'https://metamask.io/download/');
+                    }
+                } else if (walletType === 'binance') {
+                    if (window.BinanceChain) {
+                        await connectBrowserWallet(window.BinanceChain);
+                    } else {
+                        await connectWalletConnectQR();
+                    }
+                } else if (walletType === 'okx') {
+                    if (window.okxwallet) {
+                        await connectBrowserWallet(window.okxwallet);
+                    } else {
+                        await connectWalletConnectQR();
+                    }
+                } else {
+                    // Trust, TokenPocket, imToken → WalletConnect QR on desktop
+                    await connectWalletConnectQR();
                 }
-
-                // Request account access
-                const accounts = await window.ethereum.request({ 
-                    method: 'eth_requestAccounts' 
-                });
-                account = accounts[0];
-
-                // Initialize Web3
-                web3 = new Web3(window.ethereum);
-
-                // Check and switch to BSC
-                await switchToBSC();
-
-                // Display wallet info
-                displayWalletInfo(account);
-
-                // Get token balance
-                await updateTokenBalance(account);
-
             } catch (error) {
-                console.error('Error connecting MetaMask:', error);
-                alert(currentLanguage === 'zh' ? 
-                    '连接 MetaMask 失败！' : 
-                    'Failed to connect MetaMask!');
+                handleConnectionError(error);
             }
         }
 
-        // WalletConnect Connection
-        async function connectWalletConnect() {
+        // Mobile: try deep link to open wallet app
+        async function handleMobileWallet(walletType) {
+            // Check if we're already inside a wallet's in-app browser
+            if (window.ethereum) {
+                try {
+                    await connectBrowserWallet(window.ethereum);
+                    return;
+                } catch (e) {
+                    console.log('In-app browser connection failed, trying deep link');
+                }
+            }
+
+            const deepLink = walletDeepLinks[walletType];
+            if (!deepLink) {
+                await connectWalletConnectQR();
+                return;
+            }
+
+            // Try deep link
+            const startTime = Date.now();
+            window.location.href = deepLink.url;
+
+            // After 2.5s, if page is still visible, wallet app didn't open
+            setTimeout(() => {
+                if (Date.now() - startTime < 4000 && !document.hidden) {
+                    const msg = currentLanguage === 'zh'
+                        ? `未检测到该钱包 App，是否前往下载？`
+                        : `Wallet app not detected. Download it?`;
+                    if (confirm(msg)) {
+                        window.open(deepLink.fallback, '_blank');
+                    }
+                }
+            }, 2500);
+        }
+
+        // Connect via browser extension (MetaMask, Binance, OKX)
+        async function connectBrowserWallet(provider) {
+            const accounts = await provider.request({ method: 'eth_requestAccounts' });
+            account = accounts[0];
+            web3 = new Web3(provider);
+            await switchToBSC();
+            displayWalletInfo(account);
+            await updateTokenBalance(account);
+        }
+
+        // Connect via WalletConnect QR code
+        async function connectWalletConnectQR() {
             try {
-                // Create WalletConnect Provider
                 const provider = new WalletConnectProvider.default({
                     rpc: {
                         56: CONFIG.BSC_RPC_URL,
                     },
                     chainId: 56,
+                    qrcode: true,
                     qrcodeModalOptions: {
                         mobileLinks: [
                             "metamask",
@@ -1169,26 +1476,26 @@
                     },
                 });
 
-                // Enable session (triggers QR Code modal)
                 await provider.enable();
-
-                // Initialize Web3
                 web3 = new Web3(provider);
 
-                // Get accounts
                 const accounts = await web3.eth.getAccounts();
                 account = accounts[0];
 
-                // Display wallet info
-                displayWalletInfo(account);
+                // Check chain
+                const chainId = await web3.eth.getChainId();
+                if (chainId !== 56) {
+                    const msg = currentLanguage === 'zh'
+                        ? '请在钱包中切换到 BSC 主网！'
+                        : 'Please switch to BSC Mainnet in your wallet!';
+                    alert(msg);
+                }
 
-                // Get token balance
+                displayWalletInfo(account);
                 await updateTokenBalance(account);
 
-                // Subscribe to events
                 provider.on("accountsChanged", (accounts) => {
                     if (accounts.length === 0) {
-                        // Disconnected
                         document.getElementById('connectSection').classList.remove('hidden');
                         document.getElementById('walletInfo').classList.add('hidden');
                     } else {
@@ -1204,11 +1511,30 @@
                 });
 
             } catch (error) {
-                console.error('Error connecting WalletConnect:', error);
-                alert(currentLanguage === 'zh' ? 
-                    '连接失败！请重试。' : 
-                    'Connection failed! Please try again.');
+                handleConnectionError(error);
             }
+        }
+
+        function alertNoExtension(name, downloadUrl) {
+            const msg = currentLanguage === 'zh'
+                ? `未检测到 ${name} 扩展，是否前往安装？`
+                : `${name} extension not detected. Install it?`;
+            if (confirm(msg)) {
+                window.open(downloadUrl, '_blank');
+            }
+        }
+
+        function handleConnectionError(error) {
+            console.error('Wallet connection error:', error);
+            let msg;
+            if (error.message && error.message.includes('User rejected')) {
+                msg = currentLanguage === 'zh' ? '用户取消了连接请求' : 'Connection request rejected';
+            } else if (error.message && error.message.includes('Chain')) {
+                msg = currentLanguage === 'zh' ? '请确保钱包已切换到 BSC 主网' : 'Please switch to BSC Mainnet';
+            } else {
+                msg = currentLanguage === 'zh' ? '连接失败，请重试' : 'Connection failed, please try again';
+            }
+            alert(msg);
         }
 
         // Switch to BSC Network
