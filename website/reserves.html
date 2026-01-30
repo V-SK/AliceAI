@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alice BTC储备金 - 实时追踪</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 40px;
+        }
+
+        .reserve-card {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .reserve-amount {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .address-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .address-code {
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            word-break: break-all;
+            border: 2px solid #667eea;
+            margin-top: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .coming-soon {
+            text-align: center;
+            padding: 60px 20px;
+            background: #fff3cd;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💎 Alice BTC储备金</h1>
+
+        <div class="coming-soon">
+            <h2>🚀 即将上线</h2>
+            <p style="margin-top: 20px; font-size: 18px;">
+                Solana发币完成后，此页面将显示：
+            </p>
+            <ul style="text-align: left; max-width: 400px; margin: 20px auto;">
+                <li>✅ BTC储备地址</li>
+                <li>✅ 实时储备余额</li>
+                <li>✅ 累计购买记录</li>
+                <li>✅ 历史变动图表</li>
+            </ul>
+        </div>
+
+        <!-- 发币后启用 -->
+        <!--
+        <div class="reserve-card">
+            <h2 style="text-align: center;">当前BTC储备</h2>
+            <div class="reserve-amount" id="btcAmount">
+                0.00000000 BTC
+            </div>
+            <p style="text-align: center; font-size: 18px;">
+                约合 $<span id="usdValue">0.00</span> USD
+            </p>
+        </div>
+
+        <div class="address-section">
+            <h3>🔍 储备地址（公开透明）</h3>
+            <div class="address-code" id="btcAddress">
+                bc1q... (发币后公布)
+            </div>
+            <p style="margin-top: 10px; color: #666;">
+                所有人都可以在区块浏览器查询此地址
+            </p>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h4>📊 累计购入</h4>
+                <p style="font-size: 24px; margin-top: 10px; color: #667eea;">
+                    <span id="totalPurchased">0</span> BTC
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h4>📈 储备增长</h4>
+                <p style="font-size: 24px; margin-top: 10px; color: #28a745;">
+                    +<span id="growth">0</span>%
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h4>🔄 上次更新</h4>
+                <p style="font-size: 16px; margin-top: 10px;" id="lastUpdate">
+                    待数据
+                </p>
+            </div>
+        </div>
+        -->
+
+        <div style="margin-top: 40px; padding: 20px; background: #e7f3ff; border-radius: 10px;">
+            <h3>📜 储备金使用原则</h3>
+            <ul style="margin-top: 15px; line-height: 2;">
+                <li>✅ 所有BTC储备透明可查</li>
+                <li>✅ 不擅自使用或转移</li>
+                <li>✅ 仅在必要时用于回购Alice Token</li>
+                <li>✅ 所有操作提前公告</li>
+                <li>✅ 定期发布储备报告</li>
+            </ul>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px; color: #666;">
+            <a href="index.html" style="color: #667eea; text-decoration: none;">← 返回首页</a>
+        </p>
+    </div>
+</body>
+</html>

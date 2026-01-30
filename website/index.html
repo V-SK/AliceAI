@@ -297,6 +297,57 @@
             text-decoration: underline;
         }
 
+        .reserve-info {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #FFD700;
+            margin-top: 15px;
+        }
+
+        .reserve-info ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .reserve-info li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .highlight-card {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,165,0,0.1));
+            border: 2px solid rgba(255,215,0,0.3);
+        }
+
+        .highlight-card h3 {
+            color: #FFD700;
+        }
+
+        .reserve-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #F7931A;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+
+        .reserve-link:hover {
+            text-decoration: underline;
+        }
+
+        .faq-item ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 8px;
+        }
+
+        .faq-item ul li {
+            padding: 4px 0;
+            color: #555;
+        }
+
         /* FAQ Section */
         .faq-section {
             padding: 100px 20px;
@@ -472,40 +523,72 @@
     <!-- Token Section -->
     <section id="token" class="token-section">
         <div class="container">
-            <h2 data-i18n="token-title">Support Alice</h2>
+            <h2>💎 支持Alice</h2>
 
             <div class="tokenomics">
                 <div class="token-info-card">
-                    <h3 data-i18n="token-sol-title">Coming Soon on Solana</h3>
-                    <p data-i18n="token-sol-desc">Alice Token will launch on the Solana blockchain. Stay tuned!</p>
+                    <h3>🚀 即将在Solana发布</h3>
+                    <p>Alice Token将在Solana链上发布，敬请期待！</p>
                 </div>
 
                 <div class="token-info-card">
-                    <h3 data-i18n="token-fee-title">Fee Distribution</h3>
+                    <h3>💰 手续费分配</h3>
                     <ul>
-                        <li data-i18n="token-fee-1"><strong>90%</strong> - Buy BTC (Alice's belief)</li>
-                        <li data-i18n="token-fee-2"><strong>10%</strong> - Operations (servers, API, hardware)</li>
+                        <li><strong>90%</strong> - 购买BTC作为项目储备金</li>
+                        <li><strong>10%</strong> - 项目运营（服务器、API、硬件等）</li>
                     </ul>
                 </div>
 
                 <div class="token-info-card">
-                    <h3 data-i18n="token-why-title">Why Support?</h3>
-                    <p data-i18n="token-why-desc1">Holding Alice Token = Supporting Bitcoin education and AI technology</p>
-                    <p data-i18n="token-why-desc2">Every transaction contributes to the BTC ecosystem</p>
+                    <h3>🏦 BTC储备金机制</h3>
+                    <div class="reserve-info">
+                        <p><strong>透明承诺：</strong></p>
+                        <ul>
+                            <li>✅ 所有购买的BTC作为项目储备</li>
+                            <li>✅ 不会擅自使用或挪用</li>
+                            <li>✅ 储备地址公开透明，可随时查询</li>
+                            <li>✅ 未来可能的用途：</li>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>📈 市场不利时出售BTC，回购Alice Token</li>
+                                <li>💪 支撑Alice Token价格</li>
+                                <li>🔄 创造长期价值循环</li>
+                            </ul>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="token-info-card">
-                    <h3 data-i18n="token-free-title">Free to Use</h3>
-                    <p data-i18n="token-free-desc1"><strong>No token needed for any feature!</strong></p>
-                    <p data-i18n="token-free-desc2">Telegram Bot and Twitter interactions are completely free.</p>
-                    <p data-i18n="token-free-desc3">Token is only a way to support the project.</p>
+                    <h3>❤️ 为什么这样设计？</h3>
+                    <p><strong>体现Alice的核心信仰：</strong></p>
+                    <ul>
+                        <li>💎 Alice就是BTC本身</li>
+                        <li>📊 储备BTC = 与信仰一致</li>
+                        <li>🔒 资金安全透明</li>
+                        <li>🎯 长期价值导向</li>
+                    </ul>
+                    <p style="margin-top: 15px;">每笔交易都在为BTC生态和Alice项目做贡献！</p>
+                </div>
+
+                <div class="token-info-card">
+                    <h3>🎯 使用说明</h3>
+                    <p><strong>无需持币即可使用所有功能！</strong></p>
+                    <p>Telegram Bot、Twitter互动完全免费</p>
+                    <p>持币 = 支持项目 + 共享BTC储备成长</p>
+                </div>
+
+                <div class="token-info-card highlight-card">
+                    <h3>🔍 透明度承诺</h3>
+                    <p>储备BTC地址将在发币后公开</p>
+                    <p>所有人都可以实时查看储备情况</p>
+                    <p>定期公布储备报告</p>
                 </div>
             </div>
 
             <div class="token-announcement">
-                <h3 data-i18n="token-announce-title">Announcement</h3>
-                <p data-i18n="token-announce-desc1">Contract address will be announced after Solana launch.</p>
-                <p data-i18n="token-announce-desc2">Follow Twitter for updates: <a href="https://twitter.com/Alice_BTC_AI" target="_blank">@Alice_BTC_AI</a></p>
+                <h3>📢 公告</h3>
+                <p>合约地址将在Solana发币完成后公布</p>
+                <p>请关注Twitter获取最新消息：<a href="https://twitter.com/Alice_BTC_AI" target="_blank">@Alice_BTC_AI</a></p>
+                <a href="reserves.html" class="reserve-link">📊 查看BTC储备详情</a>
             </div>
         </div>
     </section>
@@ -534,6 +617,39 @@
                 <div class="faq-item">
                     <h4 data-i18n="faq4-q">When will the token launch?</h4>
                     <p data-i18n="faq4-a">Alice Token will launch on Solana. Follow <a href="https://twitter.com/Alice_BTC_AI" target="_blank" style="color:#F7931A;">@Alice_BTC_AI</a> on Twitter for the latest updates.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>❓ BTC储备金如何管理？</h4>
+                    <p><strong>完全透明：</strong></p>
+                    <ul>
+                        <li>储备地址公开，任何人可查询</li>
+                        <li>不会擅自使用或转移</li>
+                        <li>定期公布储备报告</li>
+                        <li>未来可能用于回购Alice Token，支撑价格</li>
+                    </ul>
+                </div>
+
+                <div class="faq-item">
+                    <h4>❓ 什么情况下会动用BTC储备？</h4>
+                    <p><strong>仅限以下情况：</strong></p>
+                    <ul>
+                        <li>📉 市场极端不利时，出售部分BTC回购Alice</li>
+                        <li>💪 支撑Alice Token价格，保护持有者利益</li>
+                        <li>📢 所有操作提前公告，透明执行</li>
+                    </ul>
+                    <p>目标是创造BTC储备 ↔️ Alice价格的正向循环</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>❓ 如何验证BTC储备真实性？</h4>
+                    <p>发币后会公开BTC储备地址，你可以：</p>
+                    <ul>
+                        <li>🔍 在区块浏览器查询余额</li>
+                        <li>📊 查看所有转入转出记录</li>
+                        <li>📈 追踪储备增长情况</li>
+                        <li>✅ 完全链上透明，无法作假</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -570,22 +686,6 @@
                 'feat5-desc': '中文、英文、日文、韩文',
                 'feat6-title': 'BTC 教育',
                 'feat6-desc': '从比特币本身了解比特币',
-                'token-title': '支持 Alice',
-                'token-sol-title': '即将在 Solana 发布',
-                'token-sol-desc': 'Alice Token 将在 Solana 链上发布，敬请期待！',
-                'token-fee-title': '手续费分配',
-                'token-fee-1': '90% - 用于购买 BTC（Alice 的信仰）',
-                'token-fee-2': '10% - 项目运营（服务器、API、硬件等）',
-                'token-why-title': '为什么支持？',
-                'token-why-desc1': '持有 Alice Token = 支持比特币教育和 AI 技术',
-                'token-why-desc2': '每笔交易都在为 BTC 生态做贡献',
-                'token-free-title': '免费使用',
-                'token-free-desc1': '无需持币即可使用所有功能！',
-                'token-free-desc2': 'Telegram Bot、Twitter 互动完全免费。',
-                'token-free-desc3': '持币仅作为支持项目的方式。',
-                'token-announce-title': '公告',
-                'token-announce-desc1': '合约地址将在 Solana 发币完成后公布',
-                'token-announce-desc2': '关注 Twitter 获取最新消息：',
                 'faq-title': '常见问题',
                 'faq1-q': '需要持有代币才能使用 Alice 吗？',
                 'faq1-a1': '不需要！所有功能（Telegram Bot、Twitter 互动）完全免费。',
@@ -617,22 +717,6 @@
                 'feat5-desc': 'Chinese, English, Japanese, Korean',
                 'feat6-title': 'BTC Education',
                 'feat6-desc': 'Learn about Bitcoin from Bitcoin itself',
-                'token-title': 'Support Alice',
-                'token-sol-title': 'Coming Soon on Solana',
-                'token-sol-desc': 'Alice Token will launch on the Solana blockchain. Stay tuned!',
-                'token-fee-title': 'Fee Distribution',
-                'token-fee-1': '90% - Buy BTC (Alice\'s belief)',
-                'token-fee-2': '10% - Operations (servers, API, hardware)',
-                'token-why-title': 'Why Support?',
-                'token-why-desc1': 'Holding Alice Token = Supporting Bitcoin education and AI technology',
-                'token-why-desc2': 'Every transaction contributes to the BTC ecosystem',
-                'token-free-title': 'Free to Use',
-                'token-free-desc1': 'No token needed for any feature!',
-                'token-free-desc2': 'Telegram Bot and Twitter interactions are completely free.',
-                'token-free-desc3': 'Token is only a way to support the project.',
-                'token-announce-title': 'Announcement',
-                'token-announce-desc1': 'Contract address will be announced after Solana launch.',
-                'token-announce-desc2': 'Follow Twitter for updates:',
                 'faq-title': 'FAQ',
                 'faq1-q': 'Do I need tokens to use Alice?',
                 'faq1-a1': 'No! All features (Telegram Bot, Twitter) are completely free.',
