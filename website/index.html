@@ -271,39 +271,6 @@
             border-bottom: none;
         }
 
-        .token-announcement {
-            max-width: 700px;
-            margin: 0 auto;
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border: 2px solid #F7931A;
-        }
-
-        .token-announcement h3 {
-            font-size: 1.6em;
-            color: #F7931A;
-            margin-bottom: 15px;
-        }
-
-        .token-announcement p {
-            color: #555;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
-
-        .token-announcement a {
-            color: #F7931A;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .token-announcement a:hover {
-            text-decoration: underline;
-        }
-
         .reserve-info {
             background: rgba(255, 215, 0, 0.1);
             padding: 20px;
@@ -331,18 +298,8 @@
             color: #FFD700;
         }
 
-        .reserve-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #F7931A;
-            font-weight: bold;
-            text-decoration: none;
-            font-size: 1.1em;
-        }
-
-        .reserve-link:hover {
-            text-decoration: underline;
-        }
+        /* Language-specific blocks: hide English by default (Chinese is default) */
+        [data-lang="en"] { display: none; }
 
         .faq-item ul {
             list-style: none;
@@ -532,7 +489,71 @@
         <div class="container">
             <h2>💎 Alice Token</h2>
 
-            <div class="tokenomics">
+            <!-- Chinese Version -->
+            <div class="tokenomics" data-lang="zh">
+                <div class="token-info-card">
+                    <h3>🚀 即将发布</h3>
+                    <p>Alice Token 发布准备中</p>
+                    <p>敬请期待！</p>
+                </div>
+
+                <div class="token-info-card">
+                    <h3>💰 手续费分配（计划）</h3>
+                    <ul>
+                        <li><strong>90%</strong> - 购买BTC作为项目储备金</li>
+                        <li><strong>10%</strong> - 项目运营（服务器、API、硬件等）</li>
+                    </ul>
+                </div>
+
+                <div class="token-info-card">
+                    <h3>🏦 BTC储备金机制</h3>
+                    <div class="reserve-info">
+                        <p><strong>透明承诺：</strong></p>
+                        <ul>
+                            <li>✅ 所有购买的BTC作为项目储备</li>
+                            <li>✅ 不会擅自使用或挪用</li>
+                            <li>✅ 储备地址公开透明，可随时查询</li>
+                            <li>✅ 未来可能的用途：</li>
+                            <ul style="margin-left: 20px; margin-top: 8px;">
+                                <li>📈 市场不利时出售BTC，回购Alice Token</li>
+                                <li>💪 支撑Alice Token价格</li>
+                                <li>🔄 创造长期价值循环</li>
+                            </ul>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="token-info-card">
+                    <h3>❤️ 为什么这样设计？</h3>
+                    <p><strong>体现Alice的核心信仰：</strong></p>
+                    <ul>
+                        <li>💎 Alice就是BTC本身</li>
+                        <li>📊 储备BTC = 与信仰一致</li>
+                        <li>🔒 资金安全透明</li>
+                        <li>🎯 长期价值导向</li>
+                    </ul>
+                </div>
+
+                <div class="token-info-card highlight-card">
+                    <h3>🎯 重要说明</h3>
+                    <p><strong>无需持币即可使用所有功能！</strong></p>
+                    <ul>
+                        <li>💬 Telegram Bot - 完全免费</li>
+                        <li>🐦 Twitter 互动 - 免费</li>
+                        <li>💎 未来代币 = 可选的项目支持</li>
+                    </ul>
+                </div>
+
+                <div class="token-info-card">
+                    <h3>📢 关注动态</h3>
+                    <p>关注代币发布最新消息：</p>
+                    <p>🐦 <a href="https://twitter.com/Alice_BTC_AI" target="_blank">@Alice_BTC_AI</a></p>
+                    <p>💬 <a href="https://t.me/Alice102_bot" target="_blank">Telegram Bot</a></p>
+                </div>
+            </div>
+
+            <!-- English Version -->
+            <div class="tokenomics" data-lang="en">
                 <div class="token-info-card">
                     <h3>🚀 Coming Soon</h3>
                     <p>Alice Token launch in progress</p>
@@ -622,7 +643,8 @@
                     <p data-i18n="faq4-a">Alice Token launch is in progress. Follow <a href="https://twitter.com/Alice_BTC_AI" target="_blank" style="color:#F7931A;">@Alice_BTC_AI</a> on Twitter for the latest updates.</p>
                 </div>
 
-                <div class="faq-item">
+                <!-- Chinese reserve FAQs -->
+                <div class="faq-item" data-lang="zh">
                     <h4>❓ BTC储备金如何管理？</h4>
                     <p><strong>完全透明：</strong></p>
                     <ul>
@@ -633,7 +655,7 @@
                     </ul>
                 </div>
 
-                <div class="faq-item">
+                <div class="faq-item" data-lang="zh">
                     <h4>❓ 什么情况下会动用BTC储备？</h4>
                     <p><strong>仅限以下情况：</strong></p>
                     <ul>
@@ -644,7 +666,7 @@
                     <p>目标是创造BTC储备 ↔️ Alice价格的正向循环</p>
                 </div>
 
-                <div class="faq-item">
+                <div class="faq-item" data-lang="zh">
                     <h4>❓ 如何验证BTC储备真实性？</h4>
                     <p>发币后会公开BTC储备地址，你可以：</p>
                     <ul>
@@ -652,6 +674,40 @@
                         <li>📊 查看所有转入转出记录</li>
                         <li>📈 追踪储备增长情况</li>
                         <li>✅ 完全链上透明，无法作假</li>
+                    </ul>
+                </div>
+
+                <!-- English reserve FAQs -->
+                <div class="faq-item" data-lang="en">
+                    <h4>❓ How is the BTC reserve managed?</h4>
+                    <p><strong>Fully transparent:</strong></p>
+                    <ul>
+                        <li>Reserve address public, anyone can verify</li>
+                        <li>Never used or transferred without authorization</li>
+                        <li>Regular reserve reports published</li>
+                        <li>May be used to buyback Alice Token in the future</li>
+                    </ul>
+                </div>
+
+                <div class="faq-item" data-lang="en">
+                    <h4>❓ When would the BTC reserve be used?</h4>
+                    <p><strong>Only in these cases:</strong></p>
+                    <ul>
+                        <li>📉 Sell partial BTC to buyback Alice during extreme market conditions</li>
+                        <li>💪 Support Alice Token price, protect holders</li>
+                        <li>📢 All actions announced in advance, executed transparently</li>
+                    </ul>
+                    <p>Goal: create a positive cycle between BTC reserve ↔️ Alice price</p>
+                </div>
+
+                <div class="faq-item" data-lang="en">
+                    <h4>❓ How to verify the BTC reserve?</h4>
+                    <p>After token launch, the BTC reserve address will be public. You can:</p>
+                    <ul>
+                        <li>🔍 Check balance on block explorers</li>
+                        <li>📊 View all transaction records</li>
+                        <li>📈 Track reserve growth</li>
+                        <li>✅ Fully on-chain transparent, impossible to fake</li>
                     </ul>
                 </div>
             </div>
@@ -754,6 +810,11 @@
                         el.textContent = translations[lang][key];
                     }
                 }
+            });
+
+            // Toggle language-specific blocks (data-lang="zh" / data-lang="en")
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.getAttribute('data-lang') === lang ? '' : 'none';
             });
 
             document.querySelectorAll('.lang-btn').forEach(btn => {
