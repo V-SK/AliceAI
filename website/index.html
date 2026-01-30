@@ -249,9 +249,76 @@
             margin-bottom: 8px;
         }
 
+        .contract-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            color: white;
+            text-align: center;
+        }
+
+        .contract-address-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px auto;
+            max-width: 700px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            flex-wrap: wrap;
+        }
+
+        #contractAddress {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: #FFD700;
+            word-break: break-all;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .copy-btn {
+            background: #FFD700;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #FFA500;
+            transform: scale(1.05);
+        }
+
+        .verify-note {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .verify-note a {
+            color: #FFD700;
+            text-decoration: underline;
+        }
+
         .token-info-card ul {
             list-style: none;
             padding: 0;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .token-info-card a {
+            color: #667eea;
+            font-weight: bold;
         }
 
         .token-info-card ul li {
@@ -523,72 +590,102 @@
     <!-- Token Section -->
     <section id="token" class="token-section">
         <div class="container">
-            <h2>💎 支持Alice</h2>
+            <h2>💎 Alice Token (Solana)</h2>
+
+            <!-- 合约信息卡片 -->
+            <div class="contract-card">
+                <h3>📝 Contract Address</h3>
+                <div class="contract-address-box">
+                    <code id="contractAddress">HTazA8tpArBXEt454mzRA8C8aR3YCDATzuwohWaWpump</code>
+                    <button class="copy-btn" onclick="copyContract()">
+                        📋 Copy
+                    </button>
+                </div>
+                <p class="verify-note">
+                    ✅ Verified on Solana |
+                    <a href="https://solscan.io/token/HTazA8tpArBXEt454mzRA8C8aR3YCDATzuwohWaWpump" target="_blank">
+                        View on Solscan
+                    </a>
+                </p>
+            </div>
 
             <div class="tokenomics">
                 <div class="token-info-card">
-                    <h3>🚀 即将在Solana发布</h3>
-                    <p>Alice Token将在Solana链上发布，敬请期待！</p>
-                </div>
-
-                <div class="token-info-card">
-                    <h3>💰 手续费分配</h3>
+                    <h3>⚡ On Solana</h3>
                     <ul>
-                        <li><strong>90%</strong> - 购买BTC作为项目储备金</li>
-                        <li><strong>10%</strong> - 项目运营（服务器、API、硬件等）</li>
+                        <li>Fast transactions</li>
+                        <li>Low fees</li>
+                        <li>Proven infrastructure</li>
                     </ul>
                 </div>
 
                 <div class="token-info-card">
-                    <h3>🏦 BTC储备金机制</h3>
+                    <h3>💰 Fee Distribution</h3>
+                    <ul>
+                        <li><strong>90%</strong> - Buy BTC (Project Reserve)</li>
+                        <li><strong>10%</strong> - Operations (Server, API, Hardware)</li>
+                    </ul>
+                </div>
+
+                <div class="token-info-card">
+                    <h3>🏦 BTC Reserve Mechanism</h3>
                     <div class="reserve-info">
-                        <p><strong>透明承诺：</strong></p>
+                        <p><strong>Transparency Promise:</strong></p>
                         <ul>
-                            <li>✅ 所有购买的BTC作为项目储备</li>
-                            <li>✅ 不会擅自使用或挪用</li>
-                            <li>✅ 储备地址公开透明，可随时查询</li>
-                            <li>✅ 未来可能的用途：</li>
-                            <ul style="margin-left: 20px; margin-top: 10px;">
-                                <li>📈 市场不利时出售BTC，回购Alice Token</li>
-                                <li>💪 支撑Alice Token价格</li>
-                                <li>🔄 创造长期价值循环</li>
+                            <li>✅ All BTC purchases as project reserve</li>
+                            <li>✅ Never used without disclosure</li>
+                            <li>✅ Reserve address publicly viewable</li>
+                            <li>✅ Potential future use:</li>
+                            <ul style="margin-left: 20px; margin-top: 8px;">
+                                <li>📈 Sell BTC to buyback Alice in bear markets</li>
+                                <li>💪 Support Alice Token price</li>
+                                <li>🔄 Create long-term value cycle</li>
                             </ul>
                         </ul>
                     </div>
                 </div>
 
                 <div class="token-info-card">
-                    <h3>❤️ 为什么这样设计？</h3>
-                    <p><strong>体现Alice的核心信仰：</strong></p>
+                    <h3>❤️ Why This Design?</h3>
+                    <p><strong>Aligns with Alice's Core Belief:</strong></p>
                     <ul>
-                        <li>💎 Alice就是BTC本身</li>
-                        <li>📊 储备BTC = 与信仰一致</li>
-                        <li>🔒 资金安全透明</li>
-                        <li>🎯 长期价值导向</li>
+                        <li>💎 Alice IS Bitcoin</li>
+                        <li>📊 Reserve BTC = Stay true to belief</li>
+                        <li>🔒 Transparent & secure</li>
+                        <li>🎯 Long-term value oriented</li>
                     </ul>
-                    <p style="margin-top: 15px;">每笔交易都在为BTC生态和Alice项目做贡献！</p>
                 </div>
 
                 <div class="token-info-card">
-                    <h3>🎯 使用说明</h3>
-                    <p><strong>无需持币即可使用所有功能！</strong></p>
-                    <p>Telegram Bot、Twitter互动完全免费</p>
-                    <p>持币 = 支持项目 + 共享BTC储备成长</p>
+                    <h3>🎯 How to Get Alice</h3>
+                    <p><strong>Available on:</strong></p>
+                    <ul>
+                        <li>🔄 <a href="https://raydium.io/swap/?inputCurrency=sol&outputCurrency=HTazA8tpArBXEt454mzRA8C8aR3YCDATzuwohWaWpump" target="_blank">Raydium</a></li>
+                        <li>🌊 <a href="https://www.orca.so/" target="_blank">Orca</a> (search contract)</li>
+                        <li>🦎 <a href="https://jup.ag/swap/SOL-HTazA8tpArBXEt454mzRA8C8aR3YCDATzuwohWaWpump" target="_blank">Jupiter</a></li>
+                    </ul>
+                    <p style="margin-top: 15px;">
+                        Need wallet? Get <a href="https://phantom.app/" target="_blank">Phantom</a> or
+                        <a href="https://solflare.com/" target="_blank">Solflare</a>
+                    </p>
                 </div>
 
                 <div class="token-info-card highlight-card">
-                    <h3>🔍 透明度承诺</h3>
-                    <p>储备BTC地址将在发币后公开</p>
-                    <p>所有人都可以实时查看储备情况</p>
-                    <p>定期公布储备报告</p>
+                    <h3>🎯 Important</h3>
+                    <p><strong>All features FREE - no token required!</strong></p>
+                    <ul>
+                        <li>💬 Telegram Bot - completely free</li>
+                        <li>🐦 Twitter interactions - free</li>
+                        <li>💎 Holding = Supporting the project</li>
+                    </ul>
                 </div>
-            </div>
 
-            <div class="token-announcement">
-                <h3>📢 公告</h3>
-                <p>合约地址将在Solana发币完成后公布</p>
-                <p>请关注Twitter获取最新消息：<a href="https://twitter.com/Alice_BTC_AI" target="_blank">@Alice_BTC_AI</a></p>
-                <a href="reserves.html" class="reserve-link">📊 查看BTC储备详情</a>
+                <div class="token-info-card highlight-card">
+                    <h3>🔍 Transparency</h3>
+                    <p>BTC Reserve address (coming soon)</p>
+                    <p>Real-time tracking available</p>
+                    <p>Regular reserve reports</p>
+                </div>
             </div>
         </div>
     </section>
@@ -615,8 +712,8 @@
                 </div>
 
                 <div class="faq-item">
-                    <h4 data-i18n="faq4-q">When will the token launch?</h4>
-                    <p data-i18n="faq4-a">Alice Token will launch on Solana. Follow <a href="https://twitter.com/Alice_BTC_AI" target="_blank" style="color:#F7931A;">@Alice_BTC_AI</a> on Twitter for the latest updates.</p>
+                    <h4 data-i18n="faq4-q">Where can I get Alice Token?</h4>
+                    <p data-i18n="faq4-a">Alice Token is live on Solana! Contract: HTazA8tpArBXEt454mzRA8C8aR3YCDATzuwohWaWpump. Available on <a href="https://raydium.io/swap/?inputCurrency=sol&outputCurrency=HTazA8tpArBXEt454mzRA8C8aR3YCDATzuwohWaWpump" target="_blank" style="color:#F7931A;">Raydium</a>, <a href="https://jup.ag/swap/SOL-HTazA8tpArBXEt454mzRA8C8aR3YCDATzuwohWaWpump" target="_blank" style="color:#F7931A;">Jupiter</a>, and Orca.</p>
                 </div>
 
                 <div class="faq-item">
@@ -694,8 +791,8 @@
                 'faq2-a': '每笔交易手续费的 90% 用于购买 BTC（体现 Alice 的信仰），10% 用于项目运营成本。',
                 'faq3-q': 'Alice 能做什么？',
                 'faq3-a': 'Alice 是一个以 BTC 为核心的 AI 伙伴。24/7 陪聊、分享比特币知识、分析市场情绪、为持有者打气。支持中英日韩四种语言。',
-                'faq4-q': '代币什么时候发布？',
-                'faq4-a': 'Alice Token 将在 Solana 上发布。关注 Twitter 获取最新动态。',
+                'faq4-q': '在哪里获取 Alice Token？',
+                'faq4-a': 'Alice Token 已在 Solana 上线！合约：HTazA8tpArBXEt454mzRA8C8aR3YCDATzuwohWaWpump。可在 Raydium、Jupiter、Orca 购买。',
                 'footer-title': '准备好了吗？',
                 'footer-desc': '开始和 Alice 聊天 - 完全免费，无需任何设置',
                 'footer-cta': '开始聊天'
@@ -725,8 +822,8 @@
                 'faq2-a': '90% of each transaction fee goes to buying BTC (reflecting Alice\'s belief in Bitcoin). 10% covers operational costs.',
                 'faq3-q': 'What can Alice do?',
                 'faq3-a': 'Alice is a BTC-focused AI companion. She can chat 24/7, share Bitcoin knowledge, analyze market sentiment, and encourage holders. She speaks Chinese, English, Japanese, and Korean.',
-                'faq4-q': 'When will the token launch?',
-                'faq4-a': 'Alice Token will launch on Solana. Follow @Alice_BTC_AI on Twitter for the latest updates.',
+                'faq4-q': 'Where can I get Alice Token?',
+                'faq4-a': 'Alice Token is live on Solana! Contract: HTazA8tpArBXEt454mzRA8C8aR3YCDATzuwohWaWpump. Available on Raydium, Jupiter, and Orca.',
                 'footer-title': 'Ready?',
                 'footer-desc': 'Start chatting with Alice now - completely free, no setup needed',
                 'footer-cta': 'Start Chatting'
@@ -762,6 +859,29 @@
 
         // Default to Chinese
         setLanguage('zh');
+    </script>
+
+    <script>
+    function copyContract() {
+        const address = 'HTazA8tpArBXEt454mzRA8C8aR3YCDATzuwohWaWpump';
+
+        const temp = document.createElement('input');
+        temp.value = address;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        btn.style.background = '#28a745';
+
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.background = '';
+        }, 2000);
+    }
     </script>
 </body>
 </html>
