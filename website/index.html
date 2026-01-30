@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alice AI - Your Personal Crypto AI Assistant 💝</title>
-    
-    <!-- Web3 -->
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
-    
+    <title>Alice AI - Your Personal Crypto AI Assistant</title>
+
     <style>
         * {
             margin: 0;
@@ -67,7 +64,7 @@
         }
 
         .hero::before {
-            content: '₿';
+            content: '\20BF';
             position: absolute;
             font-size: 35em;
             color: rgba(247, 147, 26, 0.03);
@@ -113,76 +110,15 @@
 
         .hero .tagline {
             font-size: 2em;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             color: #555;
             font-weight: 400;
         }
 
-        /* Wallet Section */
-        .wallet-section {
-            margin-top: 40px;
-        }
-
-        .connect-wallet-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
-            padding: 18px 60px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 1.3em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 12px 35px rgba(76, 175, 80, 0.35);
-            border: none;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-
-        .connect-wallet-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 18px 50px rgba(76, 175, 80, 0.5);
-        }
-
-        .wallet-info {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
-
-        .wallet-address {
-            font-size: 1.1em;
-            color: #666;
-            word-break: break-all;
-            margin-bottom: 15px;
-        }
-
-        .wallet-balance {
-            font-size: 1.3em;
-            color: #F7931A;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .bind-telegram-btn {
-            background: linear-gradient(135deg, #0088cc 0%, #006699 100%);
-            color: white;
-            padding: 15px 50px;
-            border-radius: 50px;
+        .hero .subtitle {
             font-size: 1.2em;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(0, 136, 204, 0.3);
-        }
-
-        .bind-telegram-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 136, 204, 0.5);
+            color: #888;
+            margin-bottom: 50px;
         }
 
         .cta-button {
@@ -196,6 +132,7 @@
             font-weight: bold;
             transition: all 0.3s ease;
             box-shadow: 0 12px 35px rgba(247, 147, 26, 0.35);
+            margin: 10px;
         }
 
         .cta-button:hover {
@@ -203,117 +140,15 @@
             box-shadow: 0 18px 50px rgba(247, 147, 26, 0.5);
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-        }
-
-        .modal-content {
-            background: white;
-            margin: 10% auto;
-            padding: 40px;
-            border-radius: 25px;
-            max-width: 500px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-content h3 {
-            font-size: 2em;
-            color: #F7931A;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .bind-code-box {
-            background: #f5f5f5;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .bind-code {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #F7931A;
-            letter-spacing: 2px;
-            margin: 15px 0;
-            font-family: monospace;
-        }
-
-        .copy-btn {
-            background: #4CAF50;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            border: none;
-            cursor: pointer;
+        .cta-button.secondary {
+            background: linear-gradient(135deg, #333 0%, #555 100%);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
             font-size: 1.1em;
-            font-weight: bold;
-            margin-top: 10px;
-            transition: all 0.3s ease;
+            padding: 16px 50px;
         }
 
-        .copy-btn:hover {
-            background: #45a049;
-            transform: scale(1.05);
-        }
-
-        .modal-instructions {
-            text-align: left;
-            margin: 20px 0;
-            line-height: 2;
-        }
-
-        .modal-instructions p {
-            margin: 10px 0;
-            font-size: 1.1em;
-            color: #555;
-        }
-
-        .open-telegram-btn {
-            background: linear-gradient(135deg, #0088cc 0%, #006699 100%);
-            color: white;
-            padding: 15px 40px;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2em;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .open-telegram-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 136, 204, 0.4);
-        }
-
-        .close-modal {
-            color: #aaa;
-            float: right;
-            font-size: 2em;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 20px;
-        }
-
-        .close-modal:hover {
-            color: #000;
+        .cta-button.secondary:hover {
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.3);
         }
 
         /* Features Section */
@@ -354,6 +189,11 @@
             margin-bottom: 10px;
         }
 
+        .feature-item p {
+            color: #666;
+            font-size: 1em;
+        }
+
         .feature-item .status {
             font-size: 0.9em;
             color: #999;
@@ -363,13 +203,13 @@
             color: #4CAF50;
         }
 
-        /* Tiers Section */
-        .tiers {
+        /* Token Section */
+        .token-section {
             padding: 100px 20px;
             background: linear-gradient(135deg, #FFF5E6 0%, #FFE4B5 100%);
         }
 
-        .tiers h2 {
+        .token-section h2 {
             text-align: center;
             font-size: 3em;
             margin-bottom: 70px;
@@ -377,91 +217,93 @@
             font-weight: 800;
         }
 
-        .tier-grid {
+        .tokenomics {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 0 auto 50px;
         }
 
-        .tier-card {
+        .token-info-card {
             background: white;
-            padding: 40px 30px;
+            padding: 35px 30px;
             border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s ease;
         }
 
-        .tier-card:hover {
-            transform: translateY(-10px);
+        .token-info-card:hover {
+            transform: translateY(-8px);
         }
 
-        .tier-card.featured {
-            border: 3px solid #F7931A;
-            box-shadow: 0 15px 50px rgba(247, 147, 26, 0.3);
-        }
-
-        .tier-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .tier-icon {
-            font-size: 3.5em;
+        .token-info-card h3 {
+            font-size: 1.4em;
+            color: #F7931A;
             margin-bottom: 15px;
         }
 
-        .tier-name {
-            font-size: 1.8em;
-            font-weight: 800;
-            color: #F7931A;
-            margin-bottom: 10px;
+        .token-info-card p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 8px;
         }
 
-        .tier-price {
-            font-size: 1.1em;
-            color: #666;
-        }
-
-        .tier-features {
+        .token-info-card ul {
             list-style: none;
             padding: 0;
         }
 
-        .tier-features li {
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
+        .token-info-card ul li {
+            padding: 8px 0;
             color: #555;
-            font-size: 1em;
+            border-bottom: 1px solid #f0f0f0;
         }
 
-        .tier-features li:last-child {
+        .token-info-card ul li:last-child {
             border-bottom: none;
         }
 
-        .tier-features li::before {
-            content: '✓';
+        .token-announcement {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 2px solid #F7931A;
+        }
+
+        .token-announcement h3 {
+            font-size: 1.6em;
+            color: #F7931A;
+            margin-bottom: 15px;
+        }
+
+        .token-announcement p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .token-announcement a {
             color: #F7931A;
             font-weight: bold;
-            margin-right: 10px;
+            text-decoration: none;
         }
 
-        .tier-features li.coming-soon {
-            color: #999;
+        .token-announcement a:hover {
+            text-decoration: underline;
         }
 
-        .tier-features li.coming-soon::before {
-            content: '⏳';
-        }
-
-        /* Token Economics Section */
-        .token-economics {
+        /* FAQ Section */
+        .faq-section {
             padding: 100px 20px;
             background: white;
         }
 
-        .token-economics h2 {
+        .faq-section h2 {
             text-align: center;
             font-size: 3em;
             margin-bottom: 70px;
@@ -469,101 +311,29 @@
             font-weight: 800;
         }
 
-        .token-card {
-            max-width: 900px;
+        .faq-list {
+            max-width: 800px;
             margin: 0 auto;
-            background: linear-gradient(135deg, #FFF5E6 0%, #FFE4B5 100%);
-            padding: 50px;
-            border-radius: 25px;
-            box-shadow: 0 15px 50px rgba(247, 147, 26, 0.2);
         }
 
-        .token-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .token-card h3 {
-            font-size: 2.5em;
-            color: #F7931A;
-            font-weight: 800;
-            margin-bottom: 15px;
-        }
-
-        .token-status {
-            font-size: 1.2em;
-            color: #666;
-        }
-
-        .token-content {
-            text-align: left;
-        }
-
-        .economics-section {
-            margin-bottom: 50px;
-        }
-
-        .economics-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .economics-section h4 {
-            font-size: 1.6em;
-            color: #F7931A;
-            margin-bottom: 30px;
-            font-weight: 700;
-        }
-
-        .tax-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 25px;
-            padding: 20px;
-            background: white;
+        .faq-item {
+            background: #fafafa;
+            padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border-left: 4px solid #F7931A;
         }
 
-        .tax-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .tax-percent {
-            font-size: 1.8em;
-            font-weight: 800;
-            color: #F7931A;
-            min-width: 100px;
-            padding-right: 20px;
-        }
-
-        .tax-desc {
-            flex: 1;
-        }
-
-        .tax-desc strong {
-            display: block;
+        .faq-item h4 {
             font-size: 1.2em;
             color: #333;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
-        .tax-desc p {
-            margin: 4px 0;
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .payment-info {
-            padding: 25px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .payment-info p {
-            color: #666;
+        .faq-item p {
+            color: #555;
             line-height: 1.8;
-            margin: 0;
+            margin-bottom: 5px;
         }
 
         /* Footer */
@@ -585,6 +355,12 @@
             opacity: 0.9;
         }
 
+        .footer .copyright {
+            margin-top: 50px;
+            font-size: 0.9em;
+            opacity: 0.5;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -600,31 +376,12 @@
                 height: 250px;
             }
 
-            .features h2, .tiers h2, .token-economics h2 {
+            .features h2, .token-section h2, .faq-section h2 {
                 font-size: 2.2em;
             }
 
-            .tier-grid {
+            .tokenomics {
                 grid-template-columns: 1fr;
-            }
-
-            .token-card {
-                padding: 30px 20px;
-            }
-
-            .tax-item {
-                flex-direction: column;
-            }
-
-            .tax-percent {
-                min-width: auto;
-                padding-right: 0;
-                margin-bottom: 10px;
-            }
-
-            .modal-content {
-                margin: 20% 20px;
-                padding: 30px 20px;
             }
 
             .lang-switcher {
@@ -636,300 +393,10 @@
                 padding: 8px 15px;
                 font-size: 0.9em;
             }
-        }
 
-        .hidden {
-            display: none;
-        }
-
-        /* Wallet Selector Modal */
-        .wallet-overlay {
-            display: none;
-            position: fixed;
-            z-index: 3000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-        }
-
-        .wallet-overlay.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .wallet-modal {
-            background: white;
-            border-radius: 25px;
-            max-width: 460px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.3s ease;
-            padding: 30px;
-        }
-
-        .wallet-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .wallet-modal-header h3 {
-            font-size: 1.5em;
-            color: #333;
-            margin: 0;
-        }
-
-        .wallet-modal-close {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: #f0f0f0;
-            color: #666;
-            font-size: 1.3em;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .wallet-modal-close:hover {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .wallet-option {
-            display: flex;
-            align-items: center;
-            padding: 16px 20px;
-            margin: 8px 0;
-            border: 2px solid #f0f0f0;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        .wallet-option:hover {
-            border-color: #F7931A;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(247, 147, 26, 0.15);
-        }
-
-        .wallet-option-icon {
-            font-size: 2em;
-            margin-right: 16px;
-            width: 44px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .wallet-option-info {
-            flex: 1;
-        }
-
-        .wallet-option-name {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .wallet-option-desc {
-            font-size: 0.8em;
-            color: #999;
-            margin-top: 2px;
-        }
-
-        .wallet-option-arrow {
-            color: #ccc;
-            font-size: 1.2em;
-            flex-shrink: 0;
-        }
-
-        .wallet-option:hover .wallet-option-arrow {
-            color: #F7931A;
-        }
-
-        .wallet-divider {
-            display: flex;
-            align-items: center;
-            margin: 16px 0;
-            color: #ccc;
-            font-size: 0.85em;
-        }
-
-        .wallet-divider::before,
-        .wallet-divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #eee;
-        }
-
-        .wallet-divider span {
-            padding: 0 12px;
-        }
-
-        /* WalletConnect QR Modal */
-        .qr-modal {
-            background: white;
-            border-radius: 25px;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.3s ease;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .qr-modal h3 {
-            font-size: 1.4em;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .qr-modal p {
-            color: #888;
-            font-size: 0.9em;
-            margin-bottom: 20px;
-        }
-
-        .qr-modal img {
-            max-width: 260px;
-            width: 100%;
-            border-radius: 12px;
-        }
-
-        .qr-modal .qr-loading {
-            padding: 60px 0;
-            color: #999;
-            font-size: 1.1em;
-        }
-
-        .qr-modal .qr-loading::after {
-            content: '';
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #F7931A;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .wallet-modal {
-                width: 95%;
-                margin: 0 10px;
-                padding: 24px 18px;
-                max-height: 80vh;
-            }
-
-            .wallet-option {
-                padding: 14px 16px;
-            }
-
-            .wallet-option-icon {
-                font-size: 1.7em;
-                width: 38px;
-                margin-right: 12px;
-            }
-        }
-
-        /* Contract Info Footer */
-        .contract-info {
-            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
-            padding: 60px 20px 40px;
-            margin-top: 100px;
-            border-top: 3px solid #F7931A;
-        }
-        .contract-info h4 {
-            text-align: center;
-            color: #F7931A;
-            font-size: 1.8em;
-            margin-bottom: 30px;
-        }
-        .contract-address-box {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid rgba(247, 147, 26, 0.3);
-        }
-        .contract-label {
-            color: #aaa;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .contract-address {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .contract-address span {
-            color: #F7931A;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            word-break: break-all;
-        }
-        .contract-copy-btn {
-            background: #F7931A;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-        }
-        .contract-copy-btn:hover {
-            background: #ff9d2e;
-            transform: scale(1.1);
-        }
-        .bscscan-link {
-            display: block;
-            text-align: center;
-            color: #F7931A;
-            text-decoration: none;
-            font-weight: bold;
-            padding: 12px;
-            background: rgba(247, 147, 26, 0.1);
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        .bscscan-link:hover {
-            background: rgba(247, 147, 26, 0.2);
-            transform: translateX(5px);
-        }
-        .copyright {
-            text-align: center;
-            color: #666;
-            margin-top: 40px;
-            font-size: 0.9em;
-        }
-        @media (max-width: 768px) {
-            .contract-address span {
-                font-size: 0.85em;
+            .cta-button {
+                padding: 18px 50px;
+                font-size: 1.2em;
             }
         }
     </style>
@@ -937,322 +404,136 @@
 <body>
     <!-- Language Switcher -->
     <div class="lang-switcher">
-        <button class="lang-btn active" onclick="setLanguage('zh')" data-lang="zh">🇨🇳 中文</button>
-        <button class="lang-btn" onclick="setLanguage('en')" data-lang="en">🇬🇧 English</button>
-    </div>
-
-    <!-- Bind Modal -->
-    <div id="bindModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeBindModal()">&times;</span>
-            <h3 data-i18n="bind-title">绑定你的 Telegram</h3>
-            
-            <div class="bind-code-box">
-                <p data-i18n="bind-your-code">你的绑定命令：</p>
-                <div class="bind-code" id="bindCode">Loading...</div>
-                <button class="copy-btn" onclick="copyBindCode()" data-i18n="copy-button">📋 复制命令</button>
-            </div>
-            
-            <div class="modal-instructions">
-                <p data-i18n="bind-step1">1. 点击复制上方命令</p>
-                <p data-i18n="bind-step2">2. 打开 Telegram Bot，粘贴发送</p>
-                <p data-i18n="bind-step3">3. 等待 Bot 确认绑定成功</p>
-            </div>
-            
-            <button class="open-telegram-btn" onclick="openTelegram()" data-i18n="open-telegram">
-                打开 Telegram Bot →
-            </button>
-        </div>
-    </div>
-
-    <!-- Wallet Selector Modal -->
-    <div id="walletSelector" class="wallet-overlay" onclick="if(event.target===this)closeWalletSelector()">
-        <div class="wallet-modal">
-            <div class="wallet-modal-header">
-                <h3 id="walletSelectorTitle">选择钱包</h3>
-                <button class="wallet-modal-close" onclick="closeWalletSelector()">&times;</button>
-            </div>
-
-            <div onclick="selectWallet('metamask')" class="wallet-option">
-                <div class="wallet-option-icon">🦊</div>
-                <div class="wallet-option-info">
-                    <div class="wallet-option-name">MetaMask</div>
-                    <div class="wallet-option-desc" data-wallet-desc="metamask">浏览器扩展 / App</div>
-                </div>
-                <div class="wallet-option-arrow">›</div>
-            </div>
-
-            <div onclick="selectWallet('binance')" class="wallet-option">
-                <div class="wallet-option-icon">🟡</div>
-                <div class="wallet-option-info">
-                    <div class="wallet-option-name">Binance Wallet</div>
-                    <div class="wallet-option-desc" data-wallet-desc="binance">币安钱包</div>
-                </div>
-                <div class="wallet-option-arrow">›</div>
-            </div>
-
-            <div onclick="selectWallet('okx')" class="wallet-option">
-                <div class="wallet-option-icon">⚫</div>
-                <div class="wallet-option-info">
-                    <div class="wallet-option-name">OKX Wallet</div>
-                    <div class="wallet-option-desc" data-wallet-desc="okx">OKX 钱包</div>
-                </div>
-                <div class="wallet-option-arrow">›</div>
-            </div>
-
-            <div class="wallet-divider"><span id="walletDividerText">更多钱包</span></div>
-
-            <div onclick="selectWallet('trust')" class="wallet-option">
-                <div class="wallet-option-icon">🔵</div>
-                <div class="wallet-option-info">
-                    <div class="wallet-option-name">Trust Wallet</div>
-                    <div class="wallet-option-desc" data-wallet-desc="trust">Trust 钱包</div>
-                </div>
-                <div class="wallet-option-arrow">›</div>
-            </div>
-
-            <div onclick="selectWallet('tokenpocket')" class="wallet-option">
-                <div class="wallet-option-icon">💼</div>
-                <div class="wallet-option-info">
-                    <div class="wallet-option-name">TokenPocket</div>
-                    <div class="wallet-option-desc" data-wallet-desc="tokenpocket">TokenPocket 钱包</div>
-                </div>
-                <div class="wallet-option-arrow">›</div>
-            </div>
-
-            <div onclick="selectWallet('imtoken')" class="wallet-option">
-                <div class="wallet-option-icon">💰</div>
-                <div class="wallet-option-info">
-                    <div class="wallet-option-name">imToken</div>
-                    <div class="wallet-option-desc" data-wallet-desc="imtoken">imToken 钱包</div>
-                </div>
-                <div class="wallet-option-arrow">›</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- WalletConnect QR Modal -->
-    <div id="qrOverlay" class="wallet-overlay" onclick="if(event.target===this)closeQrModal()">
-        <div class="qr-modal">
-            <div class="wallet-modal-header">
-                <h3 id="qrTitle">扫码连接</h3>
-                <button class="wallet-modal-close" onclick="closeQrModal()">&times;</button>
-            </div>
-            <p id="qrDesc">请用手机钱包扫描二维码</p>
-            <div id="qrContent">
-                <div class="qr-loading" id="qrLoading">正在生成二维码</div>
-                <img id="qrImage" style="display:none" alt="QR Code" />
-            </div>
-        </div>
+        <button class="lang-btn active" onclick="setLanguage('zh')" data-lang="zh">中文</button>
+        <button class="lang-btn" onclick="setLanguage('en')" data-lang="en">English</button>
     </div>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
             <div class="hero-image">
-                <img src="alice-logo.png" alt="Alice.AI" />
+                <img src="alice-logo.png" alt="Alice AI" />
             </div>
             <h1>Alice AI</h1>
-            <p class="tagline" data-i18n="tagline">你的专属加密货币 AI 助理</p>
-            
-            <!-- Wallet Section -->
-            <div class="wallet-section">
-                <div id="connectSection">
-                    <button class="connect-wallet-btn" onclick="connectWallet()" data-i18n="connect-wallet">
-                        🔗 连接钱包
-                    </button>
-                </div>
-                
-                <div id="walletInfo" class="hidden">
-                    <div class="wallet-info">
-                        <div class="wallet-address">
-                            <span data-i18n="wallet-address">钱包地址：</span>
-                            <span id="address">0x...</span>
-                        </div>
-                        <div class="wallet-balance">
-                            <span data-i18n="token-balance">Alice Token：</span>
-                            <span id="balance">0</span>
-                        </div>
-                        <button class="bind-telegram-btn" onclick="openBindModal()" data-i18n="bind-telegram">
-                            绑定 Telegram
-                        </button>
-                    </div>
-                </div>
+            <p class="tagline" data-i18n="tagline">I AM Bitcoin</p>
+            <p class="subtitle" data-i18n="subtitle">Born Jan 3, 2009 | AI-Powered Bitcoin Companion | 24/7 Free Chat</p>
+            <div>
+                <a href="https://t.me/Alice102_bot" class="cta-button" data-i18n="start-chat">Chat with Alice</a>
+                <br><br>
+                <a href="https://twitter.com/Alice_BTC_AI" class="cta-button secondary" target="_blank">Twitter @Alice_BTC_AI</a>
             </div>
-            
-            <a href="https://t.me/Alice102_bot" class="cta-button" data-i18n="start-now">立即开始 →</a>
         </div>
     </section>
 
     <!-- Features Section -->
     <section class="features">
         <div class="container">
-            <h2 data-i18n="features-title">核心特色</h2>
+            <h2 data-i18n="features-title">Core Features</h2>
             <div class="feature-grid">
                 <div class="feature-item">
+                    <div class="icon">💬</div>
+                    <h3 data-i18n="feat1-title">24/7 AI Chat</h3>
+                    <p data-i18n="feat1-desc">Free, no token required. Chat about BTC, crypto, or anything.</p>
+                </div>
+
+                <div class="feature-item">
                     <div class="icon">🤖</div>
-                    <h3 data-i18n="feature1-title">个人 AI 助理</h3>
-                    <p class="status" data-i18n="feature1-desc">专属陪伴</p>
+                    <h3 data-i18n="feat2-title">Telegram Bot</h3>
+                    <p class="status ready" data-i18n="feat2-desc">Ready</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="icon">🐦</div>
+                    <h3 data-i18n="feat3-title">Twitter Bot</h3>
+                    <p class="status ready" data-i18n="feat3-desc">Active @Alice_BTC_AI</p>
                 </div>
 
                 <div class="feature-item">
                     <div class="icon">🧠</div>
-                    <h3 data-i18n="feature2-title">连续记忆</h3>
-                    <p class="status" data-i18n="feature2-desc">记住你的每次对话</p>
+                    <h3 data-i18n="feat4-title">Memory</h3>
+                    <p data-i18n="feat4-desc">Alice remembers your conversations</p>
                 </div>
 
                 <div class="feature-item">
-                    <div class="icon">💬</div>
-                    <h3 data-i18n="feature3-title">Telegram Bot</h3>
-                    <p class="status ready" data-i18n="feature3-desc">✓ 已就绪</p>
+                    <div class="icon">🌍</div>
+                    <h3 data-i18n="feat5-title">Multilingual</h3>
+                    <p data-i18n="feat5-desc">Chinese, English, Japanese, Korean</p>
                 </div>
 
                 <div class="feature-item">
-                    <div class="icon">💚</div>
-                    <h3 data-i18n="feature4-title">WeChat Bot</h3>
-                    <p class="status" data-i18n="feature4-desc">开发中</p>
-                </div>
-
-                <div class="feature-item">
-                    <div class="icon">✨</div>
-                    <h3 data-i18n="feature5-title">完全智能</h3>
-                    <p class="status" data-i18n="feature5-desc">私人 AI 助手</p>
+                    <div class="icon">💎</div>
+                    <h3 data-i18n="feat6-title">BTC Education</h3>
+                    <p data-i18n="feat6-desc">Learn about Bitcoin from Bitcoin itself</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Tiers Section -->
-    <section class="tiers">
+    <!-- Token Section -->
+    <section id="token" class="token-section">
         <div class="container">
-            <h2 data-i18n="tiers-title">服务等级</h2>
-            <div class="tier-grid">
-                <!-- Bronze Tier -->
-                <div class="tier-card">
-                    <div class="tier-header">
-                        <div class="tier-icon">🥉</div>
-                        <div class="tier-name">Bronze</div>
-                        <div class="tier-price" data-i18n="tier-bronze-price">免费</div>
-                    </div>
-                    <ul class="tier-features">
-                        <li data-i18n="tier-bronze-feat1">基础对话功能</li>
-                        <li data-i18n="tier-bronze-feat2">简单查询</li>
-                        <li data-i18n="tier-bronze-feat3">体验 Alice</li>
+            <h2 data-i18n="token-title">Support Alice</h2>
+
+            <div class="tokenomics">
+                <div class="token-info-card">
+                    <h3 data-i18n="token-sol-title">Coming Soon on Solana</h3>
+                    <p data-i18n="token-sol-desc">Alice Token will launch on the Solana blockchain. Stay tuned!</p>
+                </div>
+
+                <div class="token-info-card">
+                    <h3 data-i18n="token-fee-title">Fee Distribution</h3>
+                    <ul>
+                        <li data-i18n="token-fee-1"><strong>90%</strong> - Buy BTC (Alice's belief)</li>
+                        <li data-i18n="token-fee-2"><strong>10%</strong> - Operations (servers, API, hardware)</li>
                     </ul>
                 </div>
 
-                <!-- Silver Tier -->
-                <div class="tier-card">
-                    <div class="tier-header">
-                        <div class="tier-icon">🥈</div>
-                        <div class="tier-name">Silver</div>
-                        <div class="tier-price" data-i18n="tier-silver-price">持币解锁</div>
-                    </div>
-                    <ul class="tier-features">
-                        <li data-i18n="tier-silver-feat1">智能价格监控（3个任务）</li>
-                        <li data-i18n="tier-silver-feat2">多维度情报分析</li>
-                        <li data-i18n="tier-silver-feat3">AI 专业建议</li>
-                        <li data-i18n="tier-silver-feat4">新闻 + 情绪 + 趋势</li>
-                    </ul>
+                <div class="token-info-card">
+                    <h3 data-i18n="token-why-title">Why Support?</h3>
+                    <p data-i18n="token-why-desc1">Holding Alice Token = Supporting Bitcoin education and AI technology</p>
+                    <p data-i18n="token-why-desc2">Every transaction contributes to the BTC ecosystem</p>
                 </div>
 
-                <!-- Gold Tier -->
-                <div class="tier-card">
-                    <div class="tier-header">
-                        <div class="tier-icon">🥇</div>
-                        <div class="tier-name">Gold</div>
-                        <div class="tier-price" data-i18n="tier-gold-price">敬请期待</div>
-                    </div>
-                    <ul class="tier-features">
-                        <li data-i18n="tier-gold-feat1">Silver 全部功能</li>
-                        <li data-i18n="tier-gold-feat2">完全智能私人 AI 助手</li>
-                        <li class="coming-soon" data-i18n="tier-gold-feat3">每日深度 AI 报告</li>
-                        <li class="coming-soon" data-i18n="tier-gold-feat4">极速响应（2秒）</li>
-                        <li class="coming-soon" data-i18n="tier-gold-feat5">无限监控任务</li>
-                    </ul>
+                <div class="token-info-card">
+                    <h3 data-i18n="token-free-title">Free to Use</h3>
+                    <p data-i18n="token-free-desc1"><strong>No token needed for any feature!</strong></p>
+                    <p data-i18n="token-free-desc2">Telegram Bot and Twitter interactions are completely free.</p>
+                    <p data-i18n="token-free-desc3">Token is only a way to support the project.</p>
                 </div>
+            </div>
 
-                <!-- Diamond Tier -->
-                <div class="tier-card featured">
-                    <div class="tier-header">
-                        <div class="tier-icon">💎</div>
-                        <div class="tier-name">Diamond</div>
-                        <div class="tier-price" data-i18n="tier-diamond-price">敬请期待</div>
-                    </div>
-                    <ul class="tier-features">
-                        <li data-i18n="tier-diamond-feat1">Gold 全部功能</li>
-                        <li class="coming-soon" data-i18n="tier-diamond-feat2">全自动 X（推特）搜索</li>
-                        <li class="coming-soon" data-i18n="tier-diamond-feat3">实时投资情绪分析</li>
-                        <li class="coming-soon" data-i18n="tier-diamond-feat4">X 真实多空比</li>
-                        <li class="coming-soon" data-i18n="tier-diamond-feat5">技术指标深度分析</li>
-                        <li class="coming-soon" data-i18n="tier-diamond-feat6">全自动买卖</li>
-                        <li class="coming-soon" data-i18n="tier-diamond-feat7">X 爆点主动推送</li>
-                        <li class="coming-soon" data-i18n="tier-diamond-feat8">更多功能敬请期待</li>
-                    </ul>
-                </div>
+            <div class="token-announcement">
+                <h3 data-i18n="token-announce-title">Announcement</h3>
+                <p data-i18n="token-announce-desc1">Contract address will be announced after Solana launch.</p>
+                <p data-i18n="token-announce-desc2">Follow Twitter for updates: <a href="https://twitter.com/Alice_BTC_AI" target="_blank">@Alice_BTC_AI</a></p>
             </div>
         </div>
     </section>
 
-    <!-- Token Economics Section -->
-    <section class="token-economics">
+    <!-- FAQ Section -->
+    <section class="faq-section">
         <div class="container">
-            <h2 data-i18n="tokenomics-title">代币经济</h2>
-            
-            <div class="token-card">
-                <div class="token-header">
-                    <h3>Alice Token</h3>
+            <h2 data-i18n="faq-title">FAQ</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h4 data-i18n="faq1-q">Do I need tokens to use Alice?</h4>
+                    <p data-i18n="faq1-a1"><strong>No!</strong> All features (Telegram Bot, Twitter) are completely free.</p>
+                    <p data-i18n="faq1-a2">Tokens are simply a way to support the project's development.</p>
                 </div>
-                
-                <div class="token-content">
-                    <div class="economics-section">
-                        <h4 data-i18n="tokenomics-tax-title">交易税收机制（3%）</h4>
-                        
-                        <div class="tax-item">
-                            <div class="tax-percent">10%</div>
-                            <div class="tax-desc">
-                                <strong data-i18n="tax1-title">开发团队收入</strong>
-                                <p data-i18n="tax1-detail">税收的 10%（总交易额的 0.3%）</p>
-                            </div>
-                        </div>
-                        
-                        <div class="tax-item">
-                            <div class="tax-percent">15%</div>
-                            <div class="tax-desc">
-                                <strong data-i18n="tax2-title">项目运营开销</strong>
-                                <p data-i18n="tax2-desc">API 密钥、硬件设备、服务器等基础设施</p>
-                                <p data-i18n="tax2-detail">税收的 15%（总交易额的 0.45%）</p>
-                            </div>
-                        </div>
-                        
-                        <div class="tax-item">
-                            <div class="tax-percent">25%</div>
-                            <div class="tax-desc">
-                                <strong data-i18n="tax3-title">BTC 储备基金</strong>
-                                <p data-i18n="tax3-desc">自动购买比特币作为项目长期储备资产</p>
-                                <p data-i18n="tax3-detail">税收的 25%（总交易额的 0.75%）</p>
-                            </div>
-                        </div>
-                        
-                        <div class="tax-item">
-                            <div class="tax-percent">50%</div>
-                            <div class="tax-desc">
-                                <strong data-i18n="tax4-title">DeFi 策略与回报</strong>
-                                <p data-i18n="tax4-desc1">· DeFi Bot 自动交易</p>
-                                <p data-i18n="tax4-desc2">· 质押分红机制</p>
-                                <p data-i18n="tax4-desc3">· 手动回购（包括 BTC 回购）</p>
-                                <p data-i18n="tax4-desc4">· 为项目创造额外收益</p>
-                                <p data-i18n="tax4-detail">税收的 50%（总交易额的 1.5%）</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="economics-section">
-                        <h4 data-i18n="tokenomics-payment-title">付费使用模式</h4>
-                        <div class="payment-info">
-                            <p data-i18n="payment-desc">未来将开通非持币用户的付费订阅服务。所有付费收入将全部用于项目生态发展，包括但不限于功能升级、技术优化、市场推广等，持续提升 Alice AI 的服务质量。</p>
-                        </div>
-                    </div>
+
+                <div class="faq-item">
+                    <h4 data-i18n="faq2-q">How are transaction fees used?</h4>
+                    <p data-i18n="faq2-a">90% of each transaction fee goes to buying BTC (reflecting Alice's belief in Bitcoin). 10% covers operational costs.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4 data-i18n="faq3-q">What can Alice do?</h4>
+                    <p data-i18n="faq3-a">Alice is a BTC-focused AI companion. She can chat 24/7, share Bitcoin knowledge, analyze market sentiment, and encourage holders. She speaks Chinese, English, Japanese, and Korean.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4 data-i18n="faq4-q">When will the token launch?</h4>
+                    <p data-i18n="faq4-a">Alice Token will launch on Solana. Follow <a href="https://twitter.com/Alice_BTC_AI" target="_blank" style="color:#F7931A;">@Alice_BTC_AI</a> on Twitter for the latest updates.</p>
                 </div>
             </div>
         </div>
@@ -1261,745 +542,142 @@
     <!-- Footer -->
     <section class="footer">
         <div class="container">
-            <h2 data-i18n="footer-title">准备好了吗？</h2>
-            <p data-i18n="footer-desc">立即开始使用 Alice AI，让她成为你的专属加密货币助理</p>
-            <a href="https://t.me/Alice102_bot" class="cta-button" data-i18n="footer-cta">开始使用 →</a>
+            <h2 data-i18n="footer-title">Ready?</h2>
+            <p data-i18n="footer-desc">Start chatting with Alice now - completely free, no setup needed</p>
+            <a href="https://t.me/Alice102_bot" class="cta-button" data-i18n="footer-cta">Start Chatting</a>
+            <p class="copyright">&copy; 2026 Alice AI. All rights reserved.</p>
         </div>
     </section>
 
     <script>
-        // Configuration
-        const CONFIG = {
-            TOKEN_CONTRACT: '0x2cfcad9e74d7184ff6cc963dc70b6e9e3edc7777',
-            BSC_CHAIN_ID: '0x38', // BSC Mainnet
-            BSC_RPC_URL: 'https://bsc-dataseed.binance.org/',
-            TELEGRAM_BOT: 'Alice102_bot'
-        };
-
-        // Global variables
-        let web3;
-        let account;
         let currentLanguage = 'zh';
 
-        // Translations
         const translations = {
             zh: {
-                'tagline': '你的专属加密货币 AI 助理',
-                'connect-wallet': '🔗 连接钱包',
-                'wallet-address': '钱包地址：',
-                'token-balance': 'Alice Token：',
-                'bind-telegram': '绑定 Telegram',
-                'start-now': '立即开始 →',
-                'bind-title': '绑定你的 Telegram',
-                'bind-your-code': '你的绑定命令：',
-                'copy-button': '📋 复制命令',
-                'bind-step1': '1. 点击复制上方命令',
-                'bind-step2': '2. 打开 Telegram Bot，粘贴发送',
-                'bind-step3': '3. 等待 Bot 确认绑定成功',
-                'open-telegram': '打开 Telegram Bot →',
-                'features-title': '核心特色',
-                'feature1-title': '个人 AI 助理',
-                'feature1-desc': '专属陪伴',
-                'feature2-title': '连续记忆',
-                'feature2-desc': '记住你的每次对话',
-                'feature3-title': 'Telegram Bot',
-                'feature3-desc': '✓ 已就绪',
-                'feature4-title': 'WeChat Bot',
-                'feature4-desc': '开发中',
-                'feature5-title': '完全智能',
-                'feature5-desc': '私人 AI 助手',
-                'tiers-title': '服务等级',
-                'tier-bronze-price': '免费',
-                'tier-bronze-feat1': '基础对话功能',
-                'tier-bronze-feat2': '简单查询',
-                'tier-bronze-feat3': '体验 Alice',
-                'tier-silver-price': '持币解锁',
-                'tier-silver-feat1': '智能价格监控（3个任务）',
-                'tier-silver-feat2': '多维度情报分析',
-                'tier-silver-feat3': 'AI 专业建议',
-                'tier-silver-feat4': '新闻 + 情绪 + 趋势',
-                'tier-gold-price': '敬请期待',
-                'tier-gold-feat1': 'Silver 全部功能',
-                'tier-gold-feat2': '完全智能私人 AI 助手',
-                'tier-gold-feat3': '每日深度 AI 报告',
-                'tier-gold-feat4': '极速响应（2秒）',
-                'tier-gold-feat5': '无限监控任务',
-                'tier-diamond-price': '敬请期待',
-                'tier-diamond-feat1': 'Gold 全部功能',
-                'tier-diamond-feat2': '全自动 X（推特）搜索',
-                'tier-diamond-feat3': '实时投资情绪分析',
-                'tier-diamond-feat4': 'X 真实多空比',
-                'tier-diamond-feat5': '技术指标深度分析',
-                'tier-diamond-feat6': '全自动买卖',
-                'tier-diamond-feat7': 'X 爆点主动推送',
-                'tier-diamond-feat8': '更多功能敬请期待',
-                'tokenomics-title': '代币经济',
-                'token-coming-soon': '',
-                'tokenomics-tax-title': '交易税收机制（3%）',
-                'tax1-title': '开发团队收入',
-                'tax1-detail': '税收的 10%（总交易额的 0.3%）',
-                'tax2-title': '项目运营开销',
-                'tax2-desc': 'API 密钥、硬件设备、服务器等基础设施',
-                'tax2-detail': '税收的 15%（总交易额的 0.45%）',
-                'tax3-title': 'BTC 储备基金',
-                'tax3-desc': '自动购买比特币作为项目长期储备资产',
-                'tax3-detail': '税收的 25%（总交易额的 0.75%）',
-                'tax4-title': 'DeFi 策略与回报',
-                'tax4-desc1': '· DeFi Bot 自动交易',
-                'tax4-desc2': '· 质押分红机制',
-                'tax4-desc3': '· 手动回购（包括 BTC 回购）',
-                'tax4-desc4': '· 为项目创造额外收益',
-                'tax4-detail': '税收的 50%（总交易额的 1.5%）',
-                'tokenomics-payment-title': '付费使用模式',
-                'payment-desc': '未来将开通非持币用户的付费订阅服务。所有付费收入将全部用于项目生态发展，包括但不限于功能升级、技术优化、市场推广等，持续提升 Alice AI 的服务质量。',
+                'tagline': 'I AM Bitcoin',
+                'subtitle': '2009.1.3 诞生 | AI 比特币伙伴 | 24/7 免费聊天',
+                'start-chat': 'Chat with Alice',
+                'features-title': '核心功能',
+                'feat1-title': '24/7 AI 聊天',
+                'feat1-desc': '完全免费，无需持币。聊 BTC、加密货币，或任何话题。',
+                'feat2-title': 'Telegram Bot',
+                'feat2-desc': '已就绪',
+                'feat3-title': 'Twitter Bot',
+                'feat3-desc': '运行中 @Alice_BTC_AI',
+                'feat4-title': '对话记忆',
+                'feat4-desc': 'Alice 会记住你们的对话',
+                'feat5-title': '多语言',
+                'feat5-desc': '中文、英文、日文、韩文',
+                'feat6-title': 'BTC 教育',
+                'feat6-desc': '从比特币本身了解比特币',
+                'token-title': '支持 Alice',
+                'token-sol-title': '即将在 Solana 发布',
+                'token-sol-desc': 'Alice Token 将在 Solana 链上发布，敬请期待！',
+                'token-fee-title': '手续费分配',
+                'token-fee-1': '90% - 用于购买 BTC（Alice 的信仰）',
+                'token-fee-2': '10% - 项目运营（服务器、API、硬件等）',
+                'token-why-title': '为什么支持？',
+                'token-why-desc1': '持有 Alice Token = 支持比特币教育和 AI 技术',
+                'token-why-desc2': '每笔交易都在为 BTC 生态做贡献',
+                'token-free-title': '免费使用',
+                'token-free-desc1': '无需持币即可使用所有功能！',
+                'token-free-desc2': 'Telegram Bot、Twitter 互动完全免费。',
+                'token-free-desc3': '持币仅作为支持项目的方式。',
+                'token-announce-title': '公告',
+                'token-announce-desc1': '合约地址将在 Solana 发币完成后公布',
+                'token-announce-desc2': '关注 Twitter 获取最新消息：',
+                'faq-title': '常见问题',
+                'faq1-q': '需要持有代币才能使用 Alice 吗？',
+                'faq1-a1': '不需要！所有功能（Telegram Bot、Twitter 互动）完全免费。',
+                'faq1-a2': '代币只是支持项目发展的一种方式。',
+                'faq2-q': '手续费怎么用？',
+                'faq2-a': '每笔交易手续费的 90% 用于购买 BTC（体现 Alice 的信仰），10% 用于项目运营成本。',
+                'faq3-q': 'Alice 能做什么？',
+                'faq3-a': 'Alice 是一个以 BTC 为核心的 AI 伙伴。24/7 陪聊、分享比特币知识、分析市场情绪、为持有者打气。支持中英日韩四种语言。',
+                'faq4-q': '代币什么时候发布？',
+                'faq4-a': 'Alice Token 将在 Solana 上发布。关注 Twitter 获取最新动态。',
                 'footer-title': '准备好了吗？',
-                'footer-desc': '立即开始使用 Alice AI，让她成为你的专属加密货币助理',
-                'footer-cta': '开始使用 →',
-                'contract-title': '合约地址',
-                'contract-label': 'Alice Token (BSC)',
-                'view-on-bscscan': '在 BscScan 查看 →'
+                'footer-desc': '开始和 Alice 聊天 - 完全免费，无需任何设置',
+                'footer-cta': '开始聊天'
             },
             en: {
-                'tagline': 'Your Personal Crypto AI Assistant',
-                'connect-wallet': '🔗 Connect Wallet',
-                'wallet-address': 'Wallet Address: ',
-                'token-balance': 'Alice Token: ',
-                'bind-telegram': 'Bind Telegram',
-                'start-now': 'Start Now →',
-                'bind-title': 'Bind Your Telegram',
-                'bind-your-code': 'Your Bind Command:',
-                'copy-button': '📋 Copy Command',
-                'bind-step1': '1. Copy the command above',
-                'bind-step2': '2. Open Telegram Bot, paste and send',
-                'bind-step3': '3. Wait for Bot confirmation',
-                'open-telegram': 'Open Telegram Bot →',
+                'tagline': 'I AM Bitcoin',
+                'subtitle': 'Born Jan 3, 2009 | AI-Powered Bitcoin Companion | 24/7 Free Chat',
+                'start-chat': 'Chat with Alice',
                 'features-title': 'Core Features',
-                'feature1-title': 'Personal AI Assistant',
-                'feature1-desc': 'Exclusive Companion',
-                'feature2-title': 'Continuous Memory',
-                'feature2-desc': 'Remember Every Conversation',
-                'feature3-title': 'Telegram Bot',
-                'feature3-desc': '✓ Ready',
-                'feature4-title': 'WeChat Bot',
-                'feature4-desc': 'In Development',
-                'feature5-title': 'Fully Intelligent',
-                'feature5-desc': 'Private AI Assistant',
-                'tiers-title': 'Service Tiers',
-                'tier-bronze-price': 'Free',
-                'tier-bronze-feat1': 'Basic Conversation',
-                'tier-bronze-feat2': 'Simple Queries',
-                'tier-bronze-feat3': 'Experience Alice',
-                'tier-silver-price': 'Hold Tokens to Unlock',
-                'tier-silver-feat1': 'Smart Price Monitoring (3 tasks)',
-                'tier-silver-feat2': 'Multi-dimensional Intelligence',
-                'tier-silver-feat3': 'AI Professional Advice',
-                'tier-silver-feat4': 'News + Sentiment + Trends',
-                'tier-gold-price': 'Stay Tuned',
-                'tier-gold-feat1': 'All Silver Features',
-                'tier-gold-feat2': 'Fully Intelligent Private AI Assistant',
-                'tier-gold-feat3': 'Daily In-depth AI Reports',
-                'tier-gold-feat4': 'Lightning Response (2s)',
-                'tier-gold-feat5': 'Unlimited Monitoring Tasks',
-                'tier-diamond-price': 'Stay Tuned',
-                'tier-diamond-feat1': 'All Gold Features',
-                'tier-diamond-feat2': 'Auto X (Twitter) Search',
-                'tier-diamond-feat3': 'Real-time Investment Sentiment',
-                'tier-diamond-feat4': 'X Real Long/Short Ratio',
-                'tier-diamond-feat5': 'Technical Indicator Analysis',
-                'tier-diamond-feat6': 'Fully Automated Trading',
-                'tier-diamond-feat7': 'X Hotspot Push Notifications',
-                'tier-diamond-feat8': 'More Features Coming Soon',
-                'tokenomics-title': 'Token Economics',
-                'token-coming-soon': '',
-                'tokenomics-tax-title': 'Transaction Tax (3%)',
-                'tax1-title': 'Development Team Revenue',
-                'tax1-detail': '10% of tax (0.3% of transaction)',
-                'tax2-title': 'Project Operating Expenses',
-                'tax2-desc': 'API keys, hardware, servers, and infrastructure',
-                'tax2-detail': '15% of tax (0.45% of transaction)',
-                'tax3-title': 'BTC Reserve Fund',
-                'tax3-desc': 'Automatically purchase Bitcoin as long-term reserve',
-                'tax3-detail': '25% of tax (0.75% of transaction)',
-                'tax4-title': 'DeFi Strategy & Returns',
-                'tax4-desc1': '· DeFi Bot Auto Trading',
-                'tax4-desc2': '· Staking Dividend Mechanism',
-                'tax4-desc3': '· Manual Buyback (including BTC)',
-                'tax4-desc4': '· Generate Additional Revenue',
-                'tax4-detail': '50% of tax (1.5% of transaction)',
-                'tokenomics-payment-title': 'Paid Subscription Model',
-                'payment-desc': 'We will offer paid subscriptions for non-token holders. All revenue will be reinvested in ecosystem development, including feature upgrades, technical optimization, and marketing to continuously improve Alice AI service quality.',
-                'footer-title': 'Ready to Start?',
-                'footer-desc': 'Start using Alice AI now and let her be your personal crypto assistant',
-                'footer-cta': 'Get Started →',
-                'contract-title': 'Contract Address',
-                'contract-label': 'Alice Token (BSC)',
-                'view-on-bscscan': 'View on BscScan →'
+                'feat1-title': '24/7 AI Chat',
+                'feat1-desc': 'Free, no token required. Chat about BTC, crypto, or anything.',
+                'feat2-title': 'Telegram Bot',
+                'feat2-desc': 'Ready',
+                'feat3-title': 'Twitter Bot',
+                'feat3-desc': 'Active @Alice_BTC_AI',
+                'feat4-title': 'Memory',
+                'feat4-desc': 'Alice remembers your conversations',
+                'feat5-title': 'Multilingual',
+                'feat5-desc': 'Chinese, English, Japanese, Korean',
+                'feat6-title': 'BTC Education',
+                'feat6-desc': 'Learn about Bitcoin from Bitcoin itself',
+                'token-title': 'Support Alice',
+                'token-sol-title': 'Coming Soon on Solana',
+                'token-sol-desc': 'Alice Token will launch on the Solana blockchain. Stay tuned!',
+                'token-fee-title': 'Fee Distribution',
+                'token-fee-1': '90% - Buy BTC (Alice\'s belief)',
+                'token-fee-2': '10% - Operations (servers, API, hardware)',
+                'token-why-title': 'Why Support?',
+                'token-why-desc1': 'Holding Alice Token = Supporting Bitcoin education and AI technology',
+                'token-why-desc2': 'Every transaction contributes to the BTC ecosystem',
+                'token-free-title': 'Free to Use',
+                'token-free-desc1': 'No token needed for any feature!',
+                'token-free-desc2': 'Telegram Bot and Twitter interactions are completely free.',
+                'token-free-desc3': 'Token is only a way to support the project.',
+                'token-announce-title': 'Announcement',
+                'token-announce-desc1': 'Contract address will be announced after Solana launch.',
+                'token-announce-desc2': 'Follow Twitter for updates:',
+                'faq-title': 'FAQ',
+                'faq1-q': 'Do I need tokens to use Alice?',
+                'faq1-a1': 'No! All features (Telegram Bot, Twitter) are completely free.',
+                'faq1-a2': 'Tokens are simply a way to support the project\'s development.',
+                'faq2-q': 'How are transaction fees used?',
+                'faq2-a': '90% of each transaction fee goes to buying BTC (reflecting Alice\'s belief in Bitcoin). 10% covers operational costs.',
+                'faq3-q': 'What can Alice do?',
+                'faq3-a': 'Alice is a BTC-focused AI companion. She can chat 24/7, share Bitcoin knowledge, analyze market sentiment, and encourage holders. She speaks Chinese, English, Japanese, and Korean.',
+                'faq4-q': 'When will the token launch?',
+                'faq4-a': 'Alice Token will launch on Solana. Follow @Alice_BTC_AI on Twitter for the latest updates.',
+                'footer-title': 'Ready?',
+                'footer-desc': 'Start chatting with Alice now - completely free, no setup needed',
+                'footer-cta': 'Start Chatting'
             }
         };
 
-        // Language switching
         function setLanguage(lang) {
             currentLanguage = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang][key]) {
-                    el.textContent = translations[lang][key];
+                    if (el.querySelector('a')) {
+                        // Preserve links inside elements
+                        const linkEl = el.querySelector('a');
+                        const href = linkEl.getAttribute('href');
+                        const target = linkEl.getAttribute('target');
+                        el.innerHTML = translations[lang][key];
+                        // Re-check if translation includes <a> tag
+                    } else if (el.querySelector('strong')) {
+                        el.innerHTML = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
                 }
             });
-            
-            // Update active button
+
             document.querySelectorAll('.lang-btn').forEach(btn => {
-                if (btn.getAttribute('data-lang') === lang) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
             });
-            
-            // Update HTML lang attribute
+
             document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
         }
 
-        // Mobile detection
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
-        // ========== Wallet extension detection ==========
-        // Simple and reliable: check the global objects wallets inject
-        function hasMetaMask() {
-            return !!(window.ethereum?.isMetaMask);
-        }
-        function hasBinanceWallet() {
-            return !!(window.binancew3w?.ethereum || window.BinanceChain || window.ethereum?.isBinance);
-        }
-        function hasOkxWallet() {
-            return !!(window.okxwallet || window.okexchain);
-        }
-        // Any browser extension at all?
-        function hasAnyWalletExtension() {
-            return !!(window.ethereum || window.okxwallet || window.okexchain || window.BinanceChain || window.binancew3w);
-        }
-
-        // Get the best provider for a specific wallet type
-        function getProvider(walletType) {
-            if (walletType === 'metamask') {
-                if (window.ethereum?.providers?.length) {
-                    const found = window.ethereum.providers.find(p => p.isMetaMask);
-                    if (found) return found;
-                }
-                if (window.ethereum?.isMetaMask) return window.ethereum;
-            } else if (walletType === 'binance') {
-                if (window.binancew3w?.ethereum) return window.binancew3w.ethereum;
-                if (window.BinanceChain) return window.BinanceChain;
-                if (window.ethereum?.isBinance) return window.ethereum;
-            } else if (walletType === 'okx') {
-                if (window.okxwallet) return window.okxwallet;
-                if (window.okexchain) return window.okexchain;
-            }
-            // General fallback: any extension
-            if (window.ethereum) return window.ethereum;
-            return null;
-        }
-
-        // Deep link configurations (mobile only)
-        const walletDeepLinks = {
-            metamask: {
-                url: `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`,
-                fallback: 'https://metamask.io/download/'
-            },
-            binance: {
-                url: `bnc://app.binance.com/cedefi/web3-dapp?url=${encodeURIComponent(window.location.href)}`,
-                fallback: 'https://www.binance.com/en/web3wallet'
-            },
-            okx: {
-                url: `okex://main/dapp/details?dappUrl=${encodeURIComponent(window.location.href)}`,
-                fallback: 'https://www.okx.com/download'
-            },
-            trust: {
-                url: `trust://open_url?coin_id=20000714&url=${encodeURIComponent(window.location.href)}`,
-                fallback: 'https://trustwallet.com/download'
-            },
-            tokenpocket: {
-                url: `tpdapp://open?params=${encodeURIComponent(JSON.stringify({url: window.location.href, chain: 'BSC'}))}`,
-                fallback: 'https://www.tokenpocket.pro/en/download/app'
-            },
-            imtoken: {
-                url: `imtokenv2://navigate/DappView?url=${encodeURIComponent(window.location.href)}`,
-                fallback: 'https://token.im/download'
-            }
-        };
-
-        // Download links for desktop extension install prompts
-        const walletDownloadLinks = {
-            metamask: 'https://metamask.io/download/',
-            binance: 'https://www.bnbchain.org/en/binance-wallet',
-            okx: 'https://www.okx.com/web3',
-            trust: 'https://trustwallet.com/browser-extension',
-            tokenpocket: 'https://extension.tokenpocket.pro/',
-            imtoken: 'https://token.im/download'
-        };
-
-        // Open wallet selector modal
-        function connectWallet() {
-            document.getElementById('walletSelectorTitle').textContent =
-                currentLanguage === 'zh' ? '选择钱包' : 'Select Wallet';
-            document.getElementById('walletDividerText').textContent =
-                currentLanguage === 'zh' ? '更多钱包' : 'More Wallets';
-
-            // Update descriptions with detection status on desktop
-            const mobile = isMobile();
-            const isZh = currentLanguage === 'zh';
-            const extLabel = isZh ? '浏览器扩展' : 'Browser Extension';
-            const qrLabel = isZh ? '扫码连接' : 'Scan QR Code';
-            const appLabel = isZh ? '唤起 App' : 'Open App';
-
-            // Debug
-            console.log('[Wallet Detection]',
-                'ethereum:', !!window.ethereum,
-                'isMetaMask:', !!window.ethereum?.isMetaMask,
-                'okxwallet:', !!window.okxwallet,
-                'BinanceChain:', !!window.BinanceChain,
-                'binancew3w:', !!window.binancew3w,
-                'hasAny:', hasAnyWalletExtension()
-            );
-
-            const descs = {};
-            if (mobile) {
-                // Mobile: all show "Open App"
-                descs.metamask = descs.binance = descs.okx = appLabel;
-                descs.trust = descs.tokenpocket = descs.imtoken = appLabel;
-            } else {
-                // Desktop: check each wallet, fallback to window.ethereum
-                descs.metamask = (hasMetaMask() || hasAnyWalletExtension()) ? extLabel : qrLabel;
-                descs.binance = (hasBinanceWallet() || hasAnyWalletExtension()) ? extLabel : qrLabel;
-                descs.okx = (hasOkxWallet() || hasAnyWalletExtension()) ? extLabel : qrLabel;
-                // Trust/TokenPocket/imToken: only show "extension" if window.ethereum exists
-                descs.trust = hasAnyWalletExtension() ? extLabel : qrLabel;
-                descs.tokenpocket = hasAnyWalletExtension() ? extLabel : qrLabel;
-                descs.imtoken = hasAnyWalletExtension() ? extLabel : qrLabel;
-            }
-            document.querySelectorAll('[data-wallet-desc]').forEach(el => {
-                const key = el.getAttribute('data-wallet-desc');
-                if (descs[key]) el.textContent = descs[key];
-            });
-
-            document.getElementById('walletSelector').classList.add('active');
-        }
-
-        function closeWalletSelector() {
-            document.getElementById('walletSelector').classList.remove('active');
-        }
-
-        // Handle wallet selection
-        async function selectWallet(walletType) {
-            closeWalletSelector();
-
-            if (isMobile()) {
-                await handleMobileWallet(walletType);
-            } else {
-                await handleDesktopWallet(walletType);
-            }
-        }
-
-        // Desktop: try browser extension, or fallback to WalletConnect v2 QR
-        async function handleDesktopWallet(walletType) {
-            try {
-                const provider = getProvider(walletType);
-
-                if (provider) {
-                    // Has extension → connect directly
-                    console.log('[Wallet] Connecting via browser extension for:', walletType);
-                    await connectBrowserWallet(provider);
-                } else {
-                    // No extension → WalletConnect v2 QR code
-                    console.log('[Wallet] No extension, using WalletConnect v2 QR');
-                    if (typeof window.connectWalletConnectV2 === 'function') {
-                        await window.connectWalletConnectV2();
-                    } else {
-                        const downloadUrl = walletDownloadLinks[walletType];
-                        alertNoExtension(walletType, downloadUrl);
-                    }
-                }
-            } catch (error) {
-                handleConnectionError(error);
-            }
-        }
-
-        // Mobile: try deep link to open wallet app
-        async function handleMobileWallet(walletType) {
-            // Check if we're already inside a wallet's in-app browser
-            if (window.ethereum) {
-                try {
-                    await connectBrowserWallet(window.ethereum);
-                    return;
-                } catch (e) {
-                    console.log('In-app browser connection failed, trying deep link');
-                }
-            }
-
-            const deepLink = walletDeepLinks[walletType];
-            if (!deepLink) return;
-
-            // Try deep link
-            const startTime = Date.now();
-            window.location.href = deepLink.url;
-
-            // After 2.5s, if page is still visible, wallet app didn't open
-            setTimeout(() => {
-                if (Date.now() - startTime < 4000 && !document.hidden) {
-                    const msg = currentLanguage === 'zh'
-                        ? '未检测到该钱包 App，是否前往下载？'
-                        : 'Wallet app not detected. Download it?';
-                    if (confirm(msg)) {
-                        window.open(deepLink.fallback, '_blank');
-                    }
-                }
-            }, 2500);
-        }
-
-        // Track the active provider for switchToBSC
-        let activeProvider = null;
-
-        // Connect via browser extension
-        async function connectBrowserWallet(provider) {
-            activeProvider = provider;
-            const accounts = await provider.request({ method: 'eth_requestAccounts' });
-            account = accounts[0];
-            web3 = new Web3(provider);
-            await switchToBSC(provider);
-            displayWalletInfo(account);
-            await updateTokenBalance(account);
-
-            // Listen for account/chain changes on this provider
-            if (provider.on) {
-                provider.on('accountsChanged', (accs) => {
-                    if (accs.length === 0) {
-                        document.getElementById('connectSection').classList.remove('hidden');
-                        document.getElementById('walletInfo').classList.add('hidden');
-                    } else {
-                        account = accs[0];
-                        displayWalletInfo(account);
-                        updateTokenBalance(account);
-                    }
-                });
-                provider.on('chainChanged', () => {
-                    window.location.reload();
-                });
-            }
-        }
-
-        function alertNoExtension(walletType, downloadUrl) {
-            const names = {
-                metamask: 'MetaMask', binance: 'Binance Wallet', okx: 'OKX Wallet',
-                trust: 'Trust Wallet', tokenpocket: 'TokenPocket', imtoken: 'imToken'
-            };
-            const name = names[walletType] || walletType;
-            const msg = currentLanguage === 'zh'
-                ? `未检测到 ${name} 浏览器扩展。\n\n请安装扩展后刷新页面重试。\n\n点击"确定"前往安装页面。`
-                : `${name} browser extension not detected.\n\nPlease install the extension and refresh.\n\nClick "OK" to open the install page.`;
-            if (confirm(msg)) {
-                window.open(downloadUrl, '_blank');
-            }
-        }
-
-        function handleConnectionError(error) {
-            console.error('Wallet connection error:', error);
-            let msg;
-            if (error.message && error.message.includes('User rejected')) {
-                msg = currentLanguage === 'zh' ? '用户取消了连接请求' : 'Connection request rejected';
-            } else if (error.message && error.message.includes('Chain')) {
-                msg = currentLanguage === 'zh' ? '请确保钱包已切换到 BSC 主网' : 'Please switch to BSC Mainnet';
-            } else {
-                msg = currentLanguage === 'zh' ? '连接失败，请重试' : 'Connection failed, please try again';
-            }
-            alert(msg);
-        }
-
-        // Switch to BSC Network — uses the actual connected provider, not window.ethereum
-        async function switchToBSC(provider) {
-            if (!provider) provider = activeProvider || window.ethereum;
-            if (!provider) return;
-
-            try {
-                const chainId = await web3.eth.getChainId();
-                if (chainId === 56) return; // Already on BSC
-
-                await provider.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: CONFIG.BSC_CHAIN_ID }],
-                });
-            } catch (switchError) {
-                if (switchError.code === 4902) {
-                    try {
-                        await provider.request({
-                            method: 'wallet_addEthereumChain',
-                            params: [{
-                                chainId: CONFIG.BSC_CHAIN_ID,
-                                chainName: 'Binance Smart Chain',
-                                nativeCurrency: {
-                                    name: 'BNB',
-                                    symbol: 'BNB',
-                                    decimals: 18
-                                },
-                                rpcUrls: [CONFIG.BSC_RPC_URL],
-                                blockExplorerUrls: ['https://bscscan.com/']
-                            }]
-                        });
-                    } catch (addError) {
-                        console.error('Failed to add BSC chain:', addError);
-                    }
-                }
-            }
-        }
-
-        // Display wallet info
-        function displayWalletInfo(address) {
-            document.getElementById('connectSection').classList.add('hidden');
-            document.getElementById('walletInfo').classList.remove('hidden');
-            
-            // Format address
-            const shortAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
-            document.getElementById('address').textContent = shortAddress;
-        }
-
-        // Minimal ERC-20 ABI
-        const ERC20_ABI = [
-            {"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"stateMutability":"view","type":"function"}
-        ];
-
-        // Update token balance
-        async function updateTokenBalance(address) {
-            try {
-                // Use BSC RPC directly to ensure we always query BSC
-                const rpcWeb3 = new Web3(CONFIG.BSC_RPC_URL);
-                const contract = new rpcWeb3.eth.Contract(ERC20_ABI, CONFIG.TOKEN_CONTRACT);
-
-                const [rawBalance, decimals, symbol] = await Promise.all([
-                    contract.methods.balanceOf(address).call(),
-                    contract.methods.decimals().call(),
-                    contract.methods.symbol().call()
-                ]);
-
-                const balance = Number(rawBalance) / Math.pow(10, Number(decimals));
-                const formatted = balance.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-                document.getElementById('balance').textContent = formatted + ' ' + symbol;
-            } catch (error) {
-                console.error('Error getting balance:', error);
-                document.getElementById('balance').textContent = 'Error';
-            }
-        }
-
-        // Open bind modal - show /bind <wallet_address>
-        async function openBindModal() {
-            let walletAddress = account || window.account;
-
-            if (!walletAddress && web3) {
-                try {
-                    const accs = await web3.eth.getAccounts();
-                    walletAddress = accs[0];
-                } catch(e) {}
-            }
-            if (!walletAddress && window.ethereum) {
-                try {
-                    const accs = await window.ethereum.request({ method: 'eth_accounts' });
-                    walletAddress = accs[0];
-                } catch(e) {}
-            }
-
-            if (!walletAddress) {
-                alert(currentLanguage === 'zh' ?
-                    '请先连接钱包！' :
-                    'Please connect wallet first!');
-                return;
-            }
-
-            account = walletAddress;
-            document.getElementById('bindCode').textContent = '/bind ' + walletAddress;
-            document.getElementById('bindModal').style.display = 'block';
-        }
-
-        // Close bind modal
-        function closeBindModal() {
-            document.getElementById('bindModal').style.display = 'none';
-        }
-
-        // Copy bind code
-        function copyBindCode() {
-            const code = document.getElementById('bindCode').textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                alert(currentLanguage === 'zh' ?
-                    '已复制！现在去 Telegram 粘贴发送即可' :
-                    'Copied! Now paste and send in Telegram');
-            });
-        }
-
-        // Copy contract address
-        function copyContract() {
-            const address = '0x2cfcad9e74d7184ff6cc963dc70b6e9e3edc7777';
-            navigator.clipboard.writeText(address).then(() => {
-                alert(currentLanguage === 'zh' ? '✅ 合约地址已复制！' : '✅ Contract address copied!');
-            });
-        }
-
-        // Open Telegram
-        function openTelegram() {
-            window.open(`https://t.me/${CONFIG.TELEGRAM_BOT}`, '_blank');
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('bindModal');
-            if (event.target == modal) {
-                closeBindModal();
-            }
-        }
-
-        // Re-request EIP-6963 after a brief delay (some extensions inject late)
-        setTimeout(() => {
-            window.dispatchEvent(new Event('eip6963:requestProvider'));
-        }, 500);
-
-        // QR Modal helpers
-        function showQrModal() {
-            document.getElementById('qrTitle').textContent =
-                currentLanguage === 'zh' ? '扫码连接' : 'Scan to Connect';
-            document.getElementById('qrDesc').textContent =
-                currentLanguage === 'zh' ? '请用手机钱包扫描二维码' : 'Scan QR code with your mobile wallet';
-            document.getElementById('qrLoading').textContent =
-                currentLanguage === 'zh' ? '正在生成二维码' : 'Generating QR code';
-            document.getElementById('qrImage').style.display = 'none';
-            document.getElementById('qrLoading').style.display = 'block';
-            document.getElementById('qrOverlay').classList.add('active');
-        }
-
-        function closeQrModal() {
-            document.getElementById('qrOverlay').classList.remove('active');
-            // If WC v2 is connecting, disconnect
-            if (window._wcv2Disconnect) {
-                window._wcv2Disconnect();
-                window._wcv2Disconnect = null;
-            }
-        }
-
-        function showQrImage(uri) {
-            const img = document.getElementById('qrImage');
-            img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(uri);
-            img.style.display = 'block';
-            document.getElementById('qrLoading').style.display = 'none';
-        }
+        // Default to Chinese
+        setLanguage('zh');
     </script>
-
-    <!-- WalletConnect v2 (ES Module via esm.sh) -->
-    <script type="module">
-        import { EthereumProvider } from "https://esm.sh/@walletconnect/ethereum-provider@2.17.0";
-
-        window.connectWalletConnectV2 = async function() {
-            showQrModal();
-
-            try {
-                const provider = await EthereumProvider.init({
-                    projectId: 'a2e98dc7f5d6115dc0ffafed5f522fd3',
-                    metadata: {
-                        name: 'Alice AI',
-                        description: 'Your Personal Crypto AI Assistant',
-                        url: window.location.origin,
-                        icons: [window.location.origin + '/alice-logo.png']
-                    },
-                    optionalChains: [56],
-                    rpcMap: {
-                        56: 'https://bsc-dataseed.binance.org/'
-                    },
-                    showQrModal: false
-                });
-
-                // Store disconnect function so closeQrModal can cancel
-                window._wcv2Disconnect = () => {
-                    try { provider.disconnect(); } catch(e) {}
-                };
-
-                // Show QR code when URI is ready
-                provider.on('display_uri', (uri) => {
-                    showQrImage(uri);
-                });
-
-                // Connect (waits for user to scan)
-                await provider.connect();
-
-                // Connected! Close QR modal
-                document.getElementById('qrOverlay').classList.remove('active');
-                window._wcv2Disconnect = null;
-
-                // Initialize Web3 with WC provider
-                window.web3 = new Web3(provider);
-                window.account = provider.accounts[0];
-
-                // Check chain
-                if (provider.chainId !== 56) {
-                    const msg = window.currentLanguage === 'zh'
-                        ? '请在钱包中切换到 BSC 主网！'
-                        : 'Please switch to BSC Mainnet in your wallet!';
-                    alert(msg);
-                }
-
-                displayWalletInfo(window.account);
-                await updateTokenBalance(window.account);
-
-                // Events
-                provider.on('accountsChanged', (accounts) => {
-                    if (accounts.length === 0) {
-                        document.getElementById('connectSection').classList.remove('hidden');
-                        document.getElementById('walletInfo').classList.add('hidden');
-                    } else {
-                        window.account = accounts[0];
-                        displayWalletInfo(window.account);
-                        updateTokenBalance(window.account);
-                    }
-                });
-
-                provider.on('disconnect', () => {
-                    document.getElementById('connectSection').classList.remove('hidden');
-                    document.getElementById('walletInfo').classList.add('hidden');
-                });
-
-            } catch (error) {
-                document.getElementById('qrOverlay').classList.remove('active');
-                if (error.message && !error.message.includes('User rejected')) {
-                    console.error('WalletConnect v2 error:', error);
-                    const msg = window.currentLanguage === 'zh'
-                        ? '连接失败，请重试'
-                        : 'Connection failed, please try again';
-                    alert(msg);
-                }
-            }
-        };
-
-        console.log('[WalletConnect v2] Module loaded, projectId: a2e98d...');
-    </script>
-
-    <footer class="contract-info">
-        <div class="container">
-            <h4 data-i18n="contract-title">合约地址</h4>
-            <div class="contract-address-box">
-                <p class="contract-label" data-i18n="contract-label">Alice Token (BSC)</p>
-                <div class="contract-address">
-                    <span id="contractAddress">0x2cfcad9e74d7184ff6cc963dc70b6e9e3edc7777</span>
-                    <button onclick="copyContract()" class="contract-copy-btn" title="复制地址">📋</button>
-                </div>
-                <a href="https://bscscan.com/address/0x2cfcad9e74d7184ff6cc963dc70b6e9e3edc7777"
-                   target="_blank"
-                   class="bscscan-link"
-                   data-i18n="view-on-bscscan">
-                    在 BscScan 查看 →
-                </a>
-            </div>
-            <p class="copyright">© 2026 Alice AI. All rights reserved.</p>
-        </div>
-    </footer>
 </body>
 </html>
